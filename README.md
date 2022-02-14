@@ -8,7 +8,7 @@ The ITSNdb is a manually curated neoantigen database created by means of a novel
 
 Therefore, all peptides in the database have experimental confirmation of their positive/negative immunogenicity (classified as “Positive” and “Negative” neoantigens respectively).The neoantigens were collected and curated from published articles searched on PubMedTM using “neoantigen'' or “neoepitopes” as keywords. The ITSNdb only includes neoantigens whose inclusion criteria were explicitly described in its reference bibliography. 
 
-***NOTE: The ITNSdb will be updated every 6 months.
+***NOTE: The ITNSdb will be updated every 6 months.***
 
 # Version 022022
 This novel Immunogenic Tumor Specific Neoantigen Database, ITSNdb, holds 9-mer SNV derived neoantigens together with its WT peptide counterpart. For each neoantigen, their restricted HLA information, gene, tumor tissue and reference were included. Figure 1A describes the current peptides distribution among tumor types, immunogenicity, mutation position and mutation position type (i.e. MHC anchor position if the amino acid change was located at position 2 or 9 in the sequence and MHC non-anchor position). In Figure 1B, the peptide count distribution for HLA restriction type is shown, whereas HLA A02:01 represents 63.93% of the HLA restricted peptides.
