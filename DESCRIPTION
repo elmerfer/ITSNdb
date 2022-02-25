@@ -1,0 +1,17 @@
+Package: ITSNdb
+Type: Package
+Title: The Immune Tumor Specific Neoantigens database
+Version: 0.1.0
+Author: Elmer A. Fernández
+Maintainer: Elmer A. Fernández <efernandez@cidie.ucc.edu.ar>
+Description: This package hold the ITSNdb and associated function. It holds for manualy curated immunogenicis and non inmunogenic neoantigens from literature
+License: GNU GPL
+Encoding: UTF-8
+LazyData: true
+Imports:
+    openxlsx,
+    plyr
+Suggests: 
+    knitr, 
+    rmarkdown
+RoxygenNote: 7.1.2
