@@ -20,8 +20,10 @@ This novel Immunogenic Tumor Specific Neoantigen Database, ITSNdb, holds 9-mer S
 install.packages("devtools")
 library(devtools)
 install_github("elmerfer/ITSNdb")
+##load library
+library(ITSNdb)
 ##load the data 
-load(ITSNdb)
+data(ITSNdb)
 ```
 
 ## Authors

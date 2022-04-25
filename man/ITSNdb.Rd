@@ -27,6 +27,7 @@ Only neoantigens whose MCH-I binding was experimentally validated and resulted p
 \item HLA : HLA associated to the neoantigen
 \item Class : Positive if the neoantigen immunogenicity was positive, Negative otherwise
 \item NeoantigenType : The genomic rearrangement that generate the neoantigen i.e "SNV", "Fusion", "INS", "DEL"
+\Item Length : neoantígen length
 }
 }
 \keyword{datasets}

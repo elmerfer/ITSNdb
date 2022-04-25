@@ -15,6 +15,7 @@
 #' \item HLA : HLA associated to the neoantigen
 #' \item Class : Positive if the neoantigen immunogenicity was positive, Negative otherwise
 #' \item NeoantigenType : The genomic rearrangement that generate the neoantigen i.e "SNV", "Fusion", "INS", "DEL"
+#' \Item Length : neoantígen length
 #' }
 #' @docType data
 #' @keywords datasets
