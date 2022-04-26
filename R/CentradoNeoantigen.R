@@ -4,19 +4,20 @@ library(msa)
 library(ComplexHeatmap)
 library(e1071)
 library(seqinr)
-if(!require(devtools)) install.packages("devtools")
-devtools::install_github("kassambara/factoextra")
+# if(!require(devtools)) install.packages("devtools")
+# devtools::install_github("kassambara/factoextra")
 library(factoextra)
 
-db <- read.xlsx("/home/elmer/Elmer/Immuno/Neoantigens/data/DB_seq41AA.xlsx")
+db <- read.xlsx("/home/elmer/Elmer/Immuno/Neoantigens/data/DB_seq49AA.xlsx")
 
 FPMp.total <- consensusMatrix(subset(db,NeoType =="Positive")$mut_seq_prot )
-# FPMp.total <- 100*sweep(FPMp.total,MARGIN=2,STATS = colSums(FPMp.total), FUN = "/")
+FPMp.total <- 100*sweep(FPMp.total,MARGIN=2,STATS = colSums(FPMp.total), FUN = "/")
 
 FPMc.total  <- consensusMatrix(subset(db,NeoType=="Cryptic")$mut_seq_prot )
-# FPMc.total <- 100*sweep(FPMc.total,MARGIN=2,STATS = colSums(FPMc.total), FUN="/")
+FPMc.total <- 100*sweep(FPMc.total,MARGIN=2,STATS = colSums(FPMc.total), FUN="/")
 
 FPMn.total  <- consensusMatrix(subset(db,NeoType=="Negative")$mut_seq_prot )
+FPMn.total <- 100*sweep(FPMn.total,MARGIN=2,STATS = colSums(FPMn.total), FUN="/")
 
 g1<-ggseqlogo(FPMp.total, method="prob")
 g2<-ggseqlogo(FPMn.total, method="prob")
@@ -24,13 +25,9 @@ g3<-ggseqlogo(FPMc.total, method="prob")
 
 gridExtra::grid.arrange(g1,g2,g3)
 
-g1<-ggseqlogo(FPMp.total)
-g2<-ggseqlogo(FPMn.total)
-g3<-ggseqlogo(FPMc.total)
+colnames(FPMp.total)
+Heatmap()
 
-gridExtra::grid.arrange(g1,g2,g3)
-
-FPMn.total <- 100*sweep(FPMn.total,MARGIN=2,STATS = colSums(FPMn.total), FUN="/")
 ncol(FPMn.total)
 PeptideMap(db$mut_seq_prot[1],list(N=FPMp.total,P=FPMn.total))
 df.pca <- plyr::ldply(subset(db, seq_length==ncol(FPMn.total))$mut_seq_prot,
