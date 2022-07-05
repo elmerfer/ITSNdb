@@ -4,7 +4,7 @@
 \alias{.onLoad}
 \title{onLoad}
 \usage{
-.onLoad(libname = NULL, pkgname)
+.onLoad(libname = NULL, pkgname = "ITSNdb")
 }
 \description{
 onLoad
