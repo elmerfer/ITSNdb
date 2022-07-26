@@ -1,4 +1,4 @@
-dat <- read.csv("/home/elmer/Elmer/ITSNdb/DB_1.1.csv",h=T)
+dat <- read.csv("/home/elmer/Elmer/ITSNdb/DB_07_2022.csv",h=T)
 View(dat)
 library(plyr)
 peps <- lapply(, function(x) subset(dat,HLA==x))

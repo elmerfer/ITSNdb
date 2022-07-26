@@ -8,52 +8,98 @@ library(seqinr)
 # devtools::install_github("kassambara/factoextra")
 library(factoextra)
 
-db <- read.xlsx("/home/elmer/Elmer/Immuno/Neoantigens/data/DB_seq49AA.xlsx")
+db <- read.xlsx("/home/elmer/Elmer/Immuno/Neoantigens/data/DB_02_2022.xlsx")
+db <- read.csv("/home/elmer/Elmer/ITSNdb/DB_07_2022.csv",h=T)
+db <- subset(db,NeoType != "Cryptic")
+FPM <- FreqMatrix(subset(db,Length==9)$Sequence )
+FPMp <- FreqMatrix(subset(db,Length==9 & NeoType == "Positive")$Sequence )
+FPMn <- FreqMatrix(subset(db,Length==9 & NeoType == "Negative")$Sequence )
 
-FPMp.total <- consensusMatrix(subset(db,NeoType =="Positive")$mut_seq_prot )
-FPMp.total <- 100*sweep(FPMp.total,MARGIN=2,STATS = colSums(FPMp.total), FUN = "/")
 
-FPMc.total  <- consensusMatrix(subset(db,NeoType=="Cryptic")$mut_seq_prot )
-FPMc.total <- 100*sweep(FPMc.total,MARGIN=2,STATS = colSums(FPMc.total), FUN="/")
+v1 <-vectorFrecDFfunction(subset(db,Length==9)$Sequence,FPM)
+vp <-vectorFrecDFfunction(subset(db,Length==9)$Sequence,FPMp)
+vn <-vectorFrecDFfunction(subset(db,Length==9)$Sequence,FPMn)
 
-FPMn.total  <- consensusMatrix(subset(db,NeoType=="Negative")$mut_seq_prot )
-FPMn.total <- 100*sweep(FPMn.total,MARGIN=2,STATS = colSums(FPMn.total), FUN="/")
+Heatmap(FPM, cluster_rows = F, cluster_columns = F)+
+  Heatmap(FPMp, cluster_rows = F, cluster_columns = F)+
+  Heatmap(FPMn, cluster_rows = F, cluster_columns = F)
 
-g1<-ggseqlogo(FPMp.total, method="prob")
-g2<-ggseqlogo(FPMn.total, method="prob")
-g3<-ggseqlogo(FPMc.total, method="prob")
 
-gridExtra::grid.arrange(g1,g2,g3)
 
-colnames(FPMp.total)
-Heatmap()
+Heatmap(vp-v1, cluster_rows = F, cluster_columns = F) +
+  Heatmap(vn-v1, cluster_rows = F, cluster_columns = F) 
 
-ncol(FPMn.total)
-PeptideMap(db$mut_seq_prot[1],list(N=FPMp.total,P=FPMn.total))
-df.pca <- plyr::ldply(subset(db, seq_length==ncol(FPMn.total))$mut_seq_prot,
-                      function(pep) PeptideMap(pep,list(N=FPMp.total,P=FPMn.total))) 
-colnames(df.pca)
-vars <- c(
-  paste0(c(40,36,27,28,30),"N"),
-  paste0(c(16,35,38,27,2),"P")
-)
+rownames(FPM-FP)
+g1<-ggseqlogo(FPMp-FPM)
+g2<-ggseqlogo(FPMn-FPM)
+
+gridExtra::grid.arrange(g1,g2)
+
+
+df.pca <- cbind(vp-v1,vn-v1)
+colnames(df.pca) <- c(paste0(c(1:9),"P"),paste0(c(1:9),"N"))
 mod.pca <- prcomp(df.pca,scale=T)
-fviz_eig(mod.pca)
-fviz_pca_ind(mod.pca,
-             col.ind = "cos2", # Color by the quality of representatio
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE     # Avoid text overlapping
-)
-fviz_pca_var(mod.pca,
-             col.var = "contrib", # Color by contributions to the PC
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE     # Avoid text overlapping
-)
+ggbiplot(mod.pca, groups = subset(db, Length == 9)$NeoType,
+         var.scale = 1.5,ellipse = T,labels.size = 5)
+ggplot(data.frame(mod.pca$x,LAB=subset(db, Length == 9)$NeoType), aes(y=PC1,x=LAB,col=LAB))+geom_violin()+geom_boxplot()
 
-ggbiplot(mod.pca, groups = subset(db, seq_length == 49)$NeoType,
-         var.scale = 1.5)
+li
 
-p <- 0.5
+dat <- subset(db,Length==9)
+dat$NeoType<-factor(dat$NeoType,levels=c("Positive","Negative"))
+loo <- loobc(dat$NeoType)
+res <- do.call(rbind,lapply(loo, function(select){
+  
+  FPM <- FreqMatrix(dat[-select,]$Sequence )
+  FPMp <- FreqMatrix(subset(dat[-select,], NeoType == "Positive")$Sequence )
+  FPMn <- FreqMatrix(subset(dat[-select,], NeoType == "Negative")$Sequence )
+  
+  ##train
+  v1 <-vectorFrecDFfunction(dat[-select,]$Sequence,FPM)
+  vp <-vectorFrecDFfunction(dat[-select,]$Sequence ,FPMp)
+  vn <-vectorFrecDFfunction(dat[-select,]$Sequence,FPMn)
+  df.pca <- cbind(vp-v1,vn-v1)
+  train.pca <- prcomp(df.pca,scale=T)
+  mod.svm <- e1071::svm(x=df.pca,y=dat[-select,]$NeoType, scale=T,kernel="lin",cost=10 )
+  
+  ##predict
+  v1p <-vectorFrecDFfunction(dat[select,]$Sequence,FPM)
+  vpp <-vectorFrecDFfunction(dat[select,]$Sequence ,FPMp)
+  vnp <-vectorFrecDFfunction(dat[select,]$Sequence,FPMn)
+  pred <- factor(predict(mod.svm,cbind(vpp-v1p,vnp-v1p)),levels=c("Positive","Negative"))
+  truth <- dat[select,]$NeoType
+  ROCeval(pred,truth)$Stats
+  
+}))
+
+
+lr <- lapply(1:100, function(x) sample(nrow(dat),0.1*nrow(dat)))
+res.rand <- do.call(rbind,lapply(lr, function(select){
+  
+  FPM <- FreqMatrix(dat[-select,]$Sequence )
+  FPMp <- FreqMatrix(subset(dat[-select,], NeoType == "Positive")$Sequence )
+  FPMn <- FreqMatrix(subset(dat[-select,], NeoType == "Negative")$Sequence )
+  
+  ##train
+  v1 <-vectorFrecDFfunction(dat[-select,]$Sequence,FPM)
+  vp <-vectorFrecDFfunction(dat[-select,]$Sequence ,FPMp)
+  vn <-vectorFrecDFfunction(dat[-select,]$Sequence,FPMn)
+  df.pca <- cbind(vp-v1,vn-v1)
+  train.pca <- prcomp(df.pca,scale=T)
+  mod.svm <- e1071::svm(x=df.pca,y=dat[-select,]$NeoType, scale=T,kernel="lin",cost=100 )
+  
+  ##predict
+  v1p <-vectorFrecDFfunction(dat[select,]$Sequence,FPM)
+  vpp <-vectorFrecDFfunction(dat[select,]$Sequence ,FPMp)
+  vnp <-vectorFrecDFfunction(dat[select,]$Sequence,FPMn)
+  pred <- factor(predict(mod.svm,cbind(vpp-v1p,vnp-v1p)),levels=c("Positive","Negative"))
+  truth <- dat[select,]$NeoType
+  ROCeval(pred,truth)$Stats
+  
+}))
+summary(res.rand)
+
+View(plyr::ldply(res,function(x) x))
 
 lp2 <- lapply(c(0.3,0.5,0.7,0.8,0.9,0.95,1), function(p){
  plyr::ldply(1:100, function(i,p){
