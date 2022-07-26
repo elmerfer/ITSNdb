@@ -1,8 +1,12 @@
+library(BiocParallel)
 #' install_netMHCPan
-#' @param file = NULL 
-#' @param dir = "./"
+#' @param file = this should be the downloaded tar.gz file "netMHCpan-4.1b.Linux.tar.gz", requested from 
+#' \code{\link[netMHCpan web site]{https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1}}
+#' @param dir = "./", the path to the directory where do you whant to store your netMHCpan. Then it will be 
+#' accesible blindly
+#' @return 
+#' on success the following mss will be printed "netMHCpan Installation OK"
 #' @export
-
 install_netMHCPan <- function(file = NULL , dir = "./"){
   software <- .OpenConfigFile()
   if(is.null(software)==FALSE){
@@ -112,10 +116,62 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
     }
   }
   
+#' RunNetMHCPan
+#'
+#' Run a peptides between 8 to 14 mers along a fasta sequence (from file)
+#' now running for netMHCpan 4.1
+#'
+#' @param peps character with the file path of the fasta file (it should be .fasta and contain onle 1 sequence)
+#' @param alleles a character vector with the HLA sequences  c("HLA-A01:01") or c("HLA-A01:01","HLA-A02:01") and so on. If NULL it will be automatically downloaded from the netMHCpan server (it may take time)
+#' @param rthParam float (default 0.5) upper limit for strong binder (SB -> peptide percent rank < rhtParam)
+#' @param rlhParam float (default 2.0) upper limit for weak binder (WB ->  rhtParam <= peptide percent rank < rltParam )
+#' @param tParam tparam
+#' @param nCores
+#'
+#' @details run netMHCpan trhough the sequence fasta file for each HLA
+#'
+#' @export
+#'
+#' @return a character
+#'
+RunNetMHCPan_peptides <- function(peps, alleles, rthParam = 0.50, rltParam= 2.0, tParam = -99.9002, nCores=1L){
+  .ValidatePepLength(peps = peps)
+  nCores <- ifelse(length(alleles)>=nCores, length(alleles),nCores)
+  pep.files <- .BuildAllelesPepFiles(pep,alleles)
+  res<- BiocParallel::bplapply(pep.files, function(x){
+    .RunNetMHCPan(seqfile=x$pfile, allele=x$allel, rthParam , rltParam , tParam )
+  }, BPPARAM= MulticoreParam(workers =  nCores))
+  .RemoveTmpPepFiles(pep.files)
+  return(invisible(res))
+}
 
+
+.ValidatePepLength <- function(peps){
+  if(any(stringr::str_length(peps)<8 | stringr::str_length(peps)>14)){
+    stop("ERROR: 8 <= Peptide length <= 15")
+  }
+}
+.BuildAllelesPepFiles <- function(peps,alleles){
+  if(missing(alleles)){
+    alleles<-"HLA"
+  }
+  pep.files <- lapply(alleles, function(x){
+    tmp<-tempfile(fileext = ".pep")
+    writeLines(peps,tmp)
+    return(list(pfile=tmp,allele=x))
+  })
+  return(pep.files)
+}
+
+.RemoveTmpPepFiles<-function(tmp.list){
+  file.remove(unlist(lapply(tmp.list,function(x)x$pfile)))
+}
 
 .RunNetMHCPan <- function(seqfile, allele, rthParam = 0.50, rltParam= 2.0, tParam = -99.9002, pLength, fileInfo){
-  hla <- allele
+  if(length(allele)>1){
+    cat("\nOnly processing ",allele[1]," Allele")
+  }
+  hla <- allele[1]
   software <- .OpenConfigFile()
   
   if(is.null(software) | !dir.exists(software$netMHCpan$main)){
@@ -162,7 +218,7 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
   names(arguments) <- nm
   # res <- unlist(lapply(hla,function(al){
   al <- stringr::str_remove_all(hla,"\\*")
-  arguments["a"] <- paste("-a",paste0(al,collapse=","))
+  arguments["a"] <- paste("-a",paste0(al))
   # print(arguments["a"])
   s1 <- system2(command = command, stdout = TRUE, args = arguments)
   return(.FormatOut(s1))
@@ -220,7 +276,6 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
 #' @param MHCII (logical) if MHCII = TRUE, then only MHC.group in "DRB", "DQ","DP","Mouse","All" are evaluated
 #'                        if MHCII = FALSE, only "HLA","BoLA", "Gogo","H","H2", "Mamu", "Patr","SLA", "All" are evaluated
 #' @export
-#'
 #' @return
 #' a list of alleles with length = nSegments (ussualy set to the number of cores or CPU workers)
 #'
@@ -228,23 +283,23 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
 #' \dontrun{
 #' FormatOut(eDB = result)
 #' }
-.GetMHCgeneList <- function(segmentsLength = 10,
+.GetMHCgeneList <- function(nSegments = 10,
                             alleleGroup = c("HLA","BoLA", "Gogo","H","H2", "Mamu", "Patr","SLA", "All")){
   softwarePath <- .OpenConfigFile()
-  allele.names.file <- stringr::str_replace_all( file.path(softwarePath$netMHCpan$main, "data/allelenames" ),"//","/")
-  if(file.exists(allele.names.file)==FALSE){
-    stop("error: File not found")
-  }
-  HLA.table <- read.table(allele.names.file)
+  data("MHC_allele_names")
+ 
+  HLA.table <- MHC_allele_names
   
   HLA.group <- match.arg( alleleGroup, c("HLA","BoLA", "Gogo","H","H2", "Mamu", "Patr","SLA", "All"))
   if(HLA.group != "ALL") {
-    HLA.table <- HLA.table[stringr::str_detect(HLA.table$V1,HLA.group),]
+    HLA.table <- HLA.table[stringr::str_detect(HLA.table$Alleles,HLA.group),,drop=F]
   }
   
-  id <- c(seq(1,nrow(HLA.table),length.out = segmentsLength),nrow(HLA.table)+1)
+  id1 <- seq(1,length(HLA.table$Alleles),length.out = nSegments+1)
+  id <- cbind(id1[-length(id1)],c(id1[-c(1,length(id1))]-1,rev(id1)[1]))
   
-  allele.list <- lapply(1:(length(id)-1), function(x) HLA.table$V1[id[x]:(id[x+1]-1)])
+  
+  allele.list <- lapply(1:nrow(id), function(x) HLA.table$Alleles[id[x,1]:id[x,2]] )
   return(allele.list)
   
 }
@@ -266,3 +321,26 @@ RunMHCAlleles <- function(seqfile, alleleList , rthParam = 0.50, rltParam= 2.0, 
   }, sqf = seqfile, BPPARAM= MulticoreParam(workers =  nCores))
   return(ret.list)
 }
+
+
+PeptidePromiscuity <- function(seqfile, alleleType="HLA", rthParam = 0.50, rltParam= 2.0, tParam = -99.9002,  nCores ){
+  
+  if(missing(nCores)){
+    nCores <- parallel::detectCores()-1
+    cat(paste("\nSetting number of cores to", nCores," (since nCores args is missing)\n"))
+  }
+  
+  
+  allele.list <- .GetMHCgeneList(nSegments=nCores, alleleGroup = "HLA")
+  ret.list <- bplapply(allele.list, function(x, sqf){
+    df<-plyr::ldply(x, function(p){
+      rr <- .RunNetMHCPan(seqfile=sqf, allele = p, rltParam = rltParam, rthParam = rthParam, tParam = tParam)
+      if(is.na(rr$BindLevel)) return(NULL)
+      return(rr)
+    })
+  }, sqf = seqfile, BPPARAM= MulticoreParam(workers =  nCores))
+  df1 <- na.omit(plyr::ldply(ret.list, function(x) x))
+  df2 <- df1 %>% group_by(Peptide) %>% summarize(WB = sum(BindLevel=="WB"), SB = sum(BindLevel=="SB"), Count = n())
+  return(df2)
+}
+

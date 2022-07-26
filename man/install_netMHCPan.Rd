@@ -7,9 +7,14 @@
 install_netMHCPan(file = NULL, dir = "./")
 }
 \arguments{
-\item{file}{= NULL}
+\item{file}{= this should be the downloaded tar.gz file "netMHCpan-4.1b.Linux.tar.gz", requested from 
+\code{\link[netMHCpan web site]{https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1}}}
 
-\item{dir}{= "./"}
+\item{dir}{= "./", the path to the directory where do you whant to store your netMHCpan. Then it will be 
+accesible blindly}
+}
+\value{
+on success the following mss will be printed "netMHCpan Installation OK"
 }
 \description{
 install_netMHCPan

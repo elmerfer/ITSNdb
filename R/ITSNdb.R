@@ -1,3 +1,5 @@
+## To build this data sets, they should be saved using save function
+
 #' ITSNdb
 #' 
 #' the New Immunogenic Tumor Specific Neoantigens database
@@ -22,4 +24,19 @@
 #' @name ITSNdb
 #' @usage load(ITSNdb)
 #' @format A data frame with 61 rows (neoantigens) and 10 variables (neoantigens info)
+NULL
+
+#' MHC_allele_names.txt
+#' 
+#' the New Immunogenic Tumor Specific Neoantigens database
+#' Only neoantigens whose MCH-I binding was experimentally validated and resulted positive and they also have the immunologic assay performed
+#' 
+#' \itemize{
+#' \item Alleles : all the possible alleles names for MHC-I
+#' }
+#' @docType data
+#' @keywords datasets
+#' @name MHC_allele_names
+#' @usage load(MHC_allele_names)
+#' @format A data frame with 1 column and 3584 rows
 NULL

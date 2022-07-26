@@ -5,7 +5,7 @@
 \title{GetMHCgeneList}
 \usage{
 .GetMHCgeneList(
-  segmentsLength = 10,
+  nSegments = 10,
   alleleGroup = c("HLA", "BoLA", "Gogo", "H", "H2", "Mamu", "Patr", "SLA", "All")
 )
 }

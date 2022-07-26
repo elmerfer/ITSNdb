@@ -22,7 +22,7 @@
   if(missing(cf)){##read the configfile
     if( file.exists(file.path(.libPaths()[1],"ITSNdb.RDS")) == TRUE ){
       config.list <- readRDS(file.path(.libPaths()[1],"ITSNdb.RDS"))
-      cat("\nConfig file exists")
+      # cat("\nConfig file exists")
     }else{
       config.list <- NULL
       cat("\nConfig file NOT exists")
