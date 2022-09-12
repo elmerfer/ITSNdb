@@ -116,9 +116,11 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
     }
   }
   
-#' RunNetMHCPan
+#' RunNetMHCPan_peptides
 #'
-#' Run a peptides between 8 to 14 mers along a fasta sequence (from file)
+#' Run netMHCpan for all the peptides against all the HLA alleles
+#' It will provide a list holding the results for each allele agains all the peptides
+#' The lists is named by allele
 #' now running for netMHCpan 4.1
 #'
 #' @param peps character with the file path of the fasta file (it should be .fasta and contain onle 1 sequence)
@@ -137,10 +139,11 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
 RunNetMHCPan_peptides <- function(peps, alleles, rthParam = 0.50, rltParam= 2.0, tParam = -99.9002, nCores=1L){
   .ValidatePepLength(peps = peps)
   nCores <- ifelse(length(alleles)>=nCores, length(alleles),nCores)
-  pep.files <- .BuildAllelesPepFiles(pep,alleles)
+  pep.files <- .BuildAllelesPepFiles(peps,alleles)
   res<- BiocParallel::bplapply(pep.files, function(x){
     .RunNetMHCPan(seqfile=x$pfile, allele=x$allel, rthParam , rltParam , tParam )
-  }, BPPARAM= MulticoreParam(workers =  nCores))
+  }, BPPARAM= BiocParallel::MulticoreParam(workers =  nCores))
+  names(res) <- unique(alleles)
   .RemoveTmpPepFiles(pep.files)
   return(invisible(res))
 }
@@ -155,7 +158,7 @@ RunNetMHCPan_peptides <- function(peps, alleles, rthParam = 0.50, rltParam= 2.0,
   if(missing(alleles)){
     alleles<-"HLA"
   }
-  pep.files <- lapply(alleles, function(x){
+  pep.files <- lapply(unique(alleles), function(x){
     tmp<-tempfile(fileext = ".pep")
     writeLines(peps,tmp)
     return(list(pfile=tmp,allele=x))
@@ -165,6 +168,12 @@ RunNetMHCPan_peptides <- function(peps, alleles, rthParam = 0.50, rltParam= 2.0,
 
 .RemoveTmpPepFiles<-function(tmp.list){
   file.remove(unlist(lapply(tmp.list,function(x)x$pfile)))
+}
+
+.BuildPepFile <- function(peps){
+  tmp<-tempfile(fileext = ".pep")
+  writeLines(peps,tmp)
+  return(list(pfile=tmp))
 }
 
 .RunNetMHCPan <- function(seqfile, allele, rthParam = 0.50, rltParam= 2.0, tParam = -99.9002, pLength, fileInfo){
@@ -260,8 +269,10 @@ RunNetMHCPan_peptides <- function(peps, alleles, rthParam = 0.50, rltParam= 2.0,
   if(file.exists(allele.names.file)==FALSE){
     stop("error: File not found")
   }
+  allele <- stringr::str_remove_all(allele," ")
   HLA.table <- read.table(allele.names.file)
-  return(any(stringr::str_detect(HLA.table$V1, allele)))
+  
+  return(length(which(HLA.table$V1 == allele))>0)
 }
 
 

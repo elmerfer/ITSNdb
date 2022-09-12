@@ -39,4 +39,4 @@ vectorFrecDFfunction <- function(seqVector,frecMatrix) {
 }
 
 #Example
-Pos_vect_frec_df <- vectorFrecDFfunction(curatedDB$Sequence,matrix_pos_neo,9)
+# Pos_vect_frec_df <- vectorFrecDFfunction(curatedDB$Sequence,matrix_pos_neo,9)

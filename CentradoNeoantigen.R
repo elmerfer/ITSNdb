@@ -21,13 +21,15 @@ vp <-vectorFrecDFfunction(subset(db,Length==9)$Sequence,FPMp)
 vn <-vectorFrecDFfunction(subset(db,Length==9)$Sequence,FPMn)
 
 Heatmap(FPM, cluster_rows = F, cluster_columns = F)+
-  Heatmap(FPMp, cluster_rows = F, cluster_columns = F)+
-  Heatmap(FPMn, cluster_rows = F, cluster_columns = F)
+  Heatmap(FPMp-FPM, cluster_rows = F, cluster_columns = F)+
+  Heatmap(FPMn-FPM, cluster_rows = F, cluster_columns = F)+
+  Heatmap(FPMp-FPMn, cluster_rows = F, cluster_columns = F)
 
-
+Heatmap(scale(FPMp,T,T), cluster_rows = F, cluster_columns = F)
 
 Heatmap(vp-v1, cluster_rows = F, cluster_columns = F) +
-  Heatmap(vn-v1, cluster_rows = F, cluster_columns = F) 
+  Heatmap(vn-v1, cluster_rows = F, cluster_columns = F) +
+  Heatmap((vp-vn), cluster_rows = F, cluster_columns = F) 
 
 rownames(FPM-FP)
 g1<-ggseqlogo(FPMp-FPM)
@@ -37,6 +39,7 @@ gridExtra::grid.arrange(g1,g2)
 
 
 df.pca <- cbind(vp-v1,vn-v1)
+dim(df.pca)
 colnames(df.pca) <- c(paste0(c(1:9),"P"),paste0(c(1:9),"N"))
 mod.pca <- prcomp(df.pca,scale=T)
 ggbiplot(mod.pca, groups = subset(db, Length == 9)$NeoType,
@@ -84,20 +87,24 @@ res.rand <- do.call(rbind,lapply(lr, function(select){
   v1 <-vectorFrecDFfunction(dat[-select,]$Sequence,FPM)
   vp <-vectorFrecDFfunction(dat[-select,]$Sequence ,FPMp)
   vn <-vectorFrecDFfunction(dat[-select,]$Sequence,FPMn)
-  df.pca <- cbind(vp-v1,vn-v1)
+  # df.pca <- cbind(vp-v1,vn-v1)
+  # df.pca <- cbind(vp-vn)
+  df.pca <- cbind(vp)
   train.pca <- prcomp(df.pca,scale=T)
-  mod.svm <- e1071::svm(x=df.pca,y=dat[-select,]$NeoType, scale=T,kernel="lin",cost=100 )
+  mod.svm <- e1071::svm(x=df.pca,y=dat[-select,]$NeoType, scale=T,kernel="lin",cost=100, probability = TRUE )
   
   ##predict
   v1p <-vectorFrecDFfunction(dat[select,]$Sequence,FPM)
   vpp <-vectorFrecDFfunction(dat[select,]$Sequence ,FPMp)
   vnp <-vectorFrecDFfunction(dat[select,]$Sequence,FPMn)
-  pred <- factor(predict(mod.svm,cbind(vpp-v1p,vnp-v1p)),levels=c("Positive","Negative"))
+  # pred <- factor(predict(mod.svm,cbind(vpp-v1p,vnp-v1p)),levels=c("Positive","Negative"))
+  # pred <- factor(predict(mod.svm,cbind(vpp-vnp)),levels=c("Positive","Negative"))
+  pred <- factor(predict(mod.svm,cbind(vpp), probability = T),levels=c("Positive","Negative"))
   truth <- dat[select,]$NeoType
   ROCeval(pred,truth)$Stats
   
 }))
-summary(res.rand)
+summary(res.rand[,c("Se","Sp","PPV","NPV","DO","F1")])
 
 View(plyr::ldply(res,function(x) x))
 

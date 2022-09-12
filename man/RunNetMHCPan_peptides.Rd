@@ -2,7 +2,7 @@
 % Please edit documentation in R/netMHCpan.R
 \name{RunNetMHCPan_peptides}
 \alias{RunNetMHCPan_peptides}
-\title{RunNetMHCPan}
+\title{RunNetMHCPan_peptides}
 \usage{
 RunNetMHCPan_peptides(
   peps,
@@ -30,7 +30,9 @@ RunNetMHCPan_peptides(
 a character
 }
 \description{
-Run a peptides between 8 to 14 mers along a fasta sequence (from file)
+Run netMHCpan for all the peptides against all the HLA alleles
+It will provide a list holding the results for each allele agains all the peptides
+The lists is named by allele
 now running for netMHCpan 4.1
 }
 \details{
