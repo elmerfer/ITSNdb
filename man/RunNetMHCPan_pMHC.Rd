@@ -4,32 +4,27 @@
 \alias{RunNetMHCPan_pMHC}
 \title{RunNetMHCPan_pMHC}
 \usage{
-RunNetMHCPan_pMHC(
-  pMHCfile,
-  rthParam = 0.5,
-  rltParam = 2,
-  tParam = -99.9002,
-  nCores = 1L,
-  outFile
-)
+RunNetMHCPan_pMHC(pMHCfile, nCores = 1L, outFile = FALSE)
 }
 \arguments{
-\item{pMHCfile}{character with the file path of the fasta file (it should be .fasta and contain onle 1 sequence)}
+\item{pMHCfile}{character with the file path of csv file containing all the Neoantigen-HLA pairs and the Sample identification}
 
-\item{rthParam}{float (default 0.5) upper limit for strong binder (SB -> peptide percent rank < rhtParam)}
+\item{nCores}{integer indicating the number of CPUs.}
 
-\item{tParam}{tparam}
-
-\item{outFile}{file name of the output file}
-
-\item{rlhParam}{float (default 2.0) upper limit for weak binder (WB ->  rhtParam <= peptide percent rank < rltParam )}
+\item{outFile}{boolean default TRUE. If TRUE, the same input file will be returned by adding the appropriate estimated columns}
 }
 \value{
-a character
+a data frame with all the peptide information from the pMHCfile with the extra columns returned by netMHCpan v.1
+if outFile == TRUE, it will overwrite the input file with the extra columns returned by netMHCpan 4.1
 }
 \description{
-Run a predict binding affinity and rank for each peptide-MHC allele pair in a cohort based manner present in the file
+The csv file (comma separated) should have the following columns :
+Sample,Neoantigen,HLA
+Pat1,GRIAFFLKY,HLA-B27:05
+...    
+This columns are mandatory and the file could include others
+The alleles will be checked. If they are not present in the allele Database they will be omitted
 }
 \details{
-run netMHCpan trhough the sequence fasta file for each HLA
+Run netMHCpan 4.1 to predict binding affinity and rank of each peptide-MHC allele pair in a cohort based manner present in the file.
 }

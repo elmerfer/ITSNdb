@@ -2,7 +2,11 @@
 % Please edit documentation in R/netMHCpan.R
 \name{install_netMHCPan}
 \alias{install_netMHCPan}
-\title{install_netMHCPan}
+\title{install_netMHCPan 4.1
+This function will install the netMHCpan 4.1 in your local computer. Only for linux environment.
+Please check tha "tsch" is already installed in your machine.
+You should first download the netMHCpan version 4.1b from 
+\code{\link[netMHCpan web site]{https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1}}}
 \usage{
 install_netMHCPan(file = NULL, dir = "./")
 }
@@ -17,5 +21,9 @@ accesible blindly}
 on success the following mss will be printed "netMHCpan Installation OK"
 }
 \description{
-install_netMHCPan
+install_netMHCPan 4.1
+This function will install the netMHCpan 4.1 in your local computer. Only for linux environment.
+Please check tha "tsch" is already installed in your machine.
+You should first download the netMHCpan version 4.1b from 
+\code{\link[netMHCpan web site]{https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1}}
 }

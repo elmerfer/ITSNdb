@@ -1,5 +1,9 @@
 library(BiocParallel)
-#' install_netMHCPan
+#' install_netMHCPan 4.1
+#' This function will install the netMHCpan 4.1 in your local computer. Only for linux environment.
+#' Please check tha "tsch" is already installed in your machine.
+#' You should first download the netMHCpan version 4.1b from 
+#' \code{\link[netMHCpan web site]{https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1}}
 #' @param file = this should be the downloaded tar.gz file "netMHCpan-4.1b.Linux.tar.gz", requested from 
 #' \code{\link[netMHCpan web site]{https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1}}
 #' @param dir = "./", the path to the directory where do you whant to store your netMHCpan. Then it will be 
@@ -123,7 +127,7 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
 #' The lists is named by allele
 #' now running for netMHCpan 4.1
 #'
-#' @param peps character with the file path of the fasta file (it should be .fasta and contain onle 1 sequence)
+#' @param peps vector of peptide sequences
 #' @param alleles a character vector with the HLA sequences  c("HLA-A01:01") or c("HLA-A01:01","HLA-A02:01") and so on. If NULL it will be automatically downloaded from the netMHCpan server (it may take time)
 #' @param rthParam float (default 0.5) upper limit for strong binder (SB -> peptide percent rank < rhtParam)
 #' @param rlhParam float (default 2.0) upper limit for weak binder (WB ->  rhtParam <= peptide percent rank < rltParam )
@@ -134,7 +138,9 @@ install_netMHCPan <- function(file = NULL , dir = "./"){
 #'
 #' @export
 #'
-#' @return a character
+#' @return a named list with data frames slots holding the netMHCpan 4.1 results table. 
+#' Each slot corresponds to each allele and is named accordingly
+#' length(list) == length(alleles)
 #'
 RunNetMHCPan_peptides <- function(peps, alleles, rthParam = 0.50, rltParam= 2.0, tParam = -99.9002, nCores=1L){
   .ValidatePepLength(peps = peps)

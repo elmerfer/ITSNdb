@@ -14,7 +14,7 @@ RunNetMHCPan_peptides(
 )
 }
 \arguments{
-\item{peps}{character with the file path of the fasta file (it should be .fasta and contain onle 1 sequence)}
+\item{peps}{vector of peptide sequences}
 
 \item{alleles}{a character vector with the HLA sequences  c("HLA-A01:01") or c("HLA-A01:01","HLA-A02:01") and so on. If NULL it will be automatically downloaded from the netMHCpan server (it may take time)}
 
@@ -27,7 +27,9 @@ RunNetMHCPan_peptides(
 \item{rlhParam}{float (default 2.0) upper limit for weak binder (WB ->  rhtParam <= peptide percent rank < rltParam )}
 }
 \value{
-a character
+a named list with data frames slots holding the netMHCpan 4.1 results table. 
+Each slot corresponds to each allele and is named accordingly
+length(list) == length(alleles)
 }
 \description{
 Run netMHCpan for all the peptides against all the HLA alleles

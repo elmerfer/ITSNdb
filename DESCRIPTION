@@ -4,13 +4,14 @@ Title: The Immune Tumor Specific Neoantigens database
 Version: 0.1.0
 Author: Elmer A. Fernández
 Maintainer: Elmer A. Fernández <efernandez@cidie.ucc.edu.ar>
-Description: This package hold the ITSNdb and associated function. It holds for manualy curated immunogenicis and non inmunogenic neoantigens from literature
+Description: This package hold the ITSNdb and associated function. It holds manualy curated immunogenicis and non inmunogenic neoantigens from literature.In addition it hold the netMHCpan R interface to process peptide binding affinity to MHC-I complex.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports:
     openxlsx,
-    plyr
+    plyr,
+    BiocParallel
 Suggests: 
     knitr, 
     rmarkdown
