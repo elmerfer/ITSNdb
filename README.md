@@ -29,7 +29,7 @@ The ITSNdb library allows the installation and use of the netMHCpan version 4.1 
 To verify if you have it in your machine, please type from a console terminal the following command 
 'tsch --version'
 if succeed you will see something like this:
-![tsch output](https://github.com/elmerfer/RAPInetMHCpan/blob/master/tsch.shell.png)
+![tsch output](https://github.com/elmerfer/ITSNdb/blob/master/tsch.shell.png)
 if not installed try 'sudo apt-get install tcsh' and verify. 
 
 ## Installation
