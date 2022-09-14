@@ -22,7 +22,7 @@ library(ITSNdb)
 ##load the data 
 data(ITSNdb)
 ```
-# netMHCpan version 4.1
+## Run the netMHCpan version 4.1 in R using the ITSNdb
 The ITSNdb library allows the installation and use of the netMHCpan version 4.1 software to predict peptide binding affinity to MHC-I molecules.
 (up to now only available for Linux, Mac in progress)
 ### Check if the appropriate C shell is installed in your machine
