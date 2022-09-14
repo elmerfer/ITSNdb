@@ -70,6 +70,25 @@ $`HLA-B35:03`
   Pos         MHC   Peptide      Core Of Gp Gl Ip Il     Icore Identity  Score_EL %Rank_EL Score_BA %Rank_BA  Aff(nM) BindLevel
 1   1 HLA-B*35:03 GRIAFFLKY GRIAFFLKY  0  0  0  0  0 GRIAFFLKY  PEPLIST 0.0000600   31.333 0.009315   55.345 45206.31      <NA>
 ```
+### Predict peptide-MHC-I binding affinities from a cohort study
+```R
+## we will build a simulated cohort study with two subjects
+df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
+df.to.test
+    Sample Neoantigen        HLA
+1 Subject1  GRIAFFLKY HLA-B27:05
+2 Subject1  LPIQYEPVL HLA-B35:03
+3 Subject2  KLILWRGLK HLA-A03:01
+# we will save it in a comma separated text file in the working directory
+write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
+#run predictions 
+Cohort_results <- RunNetMHCPan_pMHC(pMHCfile = "MyPatientsNeoantigenList.csv")
+Cohort_results
+  Neoantigen   Sample        HLA Pos         MHC      Core Of Gp Gl Ip Il     Icore Identity  Score_EL %Rank_EL Score_BA %Rank_BA Aff(nM) BindLevel
+1  GRIAFFLKY Subject1 HLA-B27:05   1 HLA-B*27:05 GRIAFFLKY  0  0  0  0  0 GRIAFFLKY  PEPLIST 0.9810120    0.009 0.659218    0.103   39.93        SB
+2  LPIQYEPVL Subject1 HLA-B35:03   1 HLA-B*35:03 LPIQYEPVL  0  0  0  0  0 LPIQYEPVL  PEPLIST 0.9816510    0.004 0.690369    0.008   28.51        SB
+3  KLILWRGLK Subject2 HLA-A03:01   1 HLA-A*03:01 KLILWRGLK  0  0  0  0  0 KLILWRGLK  PEPLIST 0.7217850    0.184 0.733193    0.049   17.94        SB
+```
 
 
 ## Authors
