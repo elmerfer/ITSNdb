@@ -29,11 +29,14 @@ The ITSNdb library allows the installation and use of the netMHCpan version 4.1 
 To verify if you have it in your machine, please type from a console terminal the following command 
 'tsch --version'
 if succeed you will see something like this:
-![tsch output](https://github.com/elmerfer/ITSNdb/blob/master/tsch.shell.png)
+![tsch output](https://github.com/elmerfer/ITSNdb/blob/main/tsch.shell.png)
+
 if not installed try 'sudo apt-get install tcsh' and verify. 
 
-## Installation
-```
+### Installation of netMHCpan and netMHCIIpan with RAPInetMHCpan into R
+Follow the instructions and fill the form to receive the rights to download [netMHCpan](https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.0)  and save it to your favorite directory.
+Onpen an R session or RStudio and type:
+```R
 install.packages("devtools")
 library(devtools)
 install_github("elmerfer/ITSNdb")
@@ -41,6 +44,23 @@ install_github("elmerfer/ITSNdb")
 library(ITSNdb)
 install_netMHCPan(choolse.file(), )
 ```
+installNetMHCPan(file = "/home/.../myfavoritedir/netMHCpan-VERSION.Linux.tar.gz" , data = NULL, dir = "/where i whant/dir")
+installNetMHCIIPan(file = "/home/.../myfavoritedir/netMHCIIpan-VERSION.Linux.tar.gz" , data = NULL, dir = "/where i whant/dir")
+```
+It will print on console:
+
+`netMHCpan Installation OK`
+
+or
+
+`netMHCIIpan Installation OK`
+
+### Testing the library
+Please download and run the following R script file [test.rapiNetMHCpan](https://github.com/elmerfer/RAPInetMHCpan/blob/master/test.rapiNetMHCpan.R)
+
+## Installation
+```
+
 
 
 ## Authors
