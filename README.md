@@ -34,7 +34,12 @@ if succeed you will see something like this:
 if not installed try 'sudo apt-get install tcsh' and verify. 
 
 ### Installation of netMHCpan and netMHCIIpan with RAPInetMHCpan into R
-Follow the instructions and fill the form to receive the rights to download [netMHCpan](https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.0)  and save it to your favorite directory.
+Follow the instructions and fill the form to receive the rights to download [netMHCpan](https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1) 
+and save it to your favorite directory.
+![Download](https://github.com/elmerfer/ITSNdb/blob/main/DownloadV4.1.png)
+
+#### Up to now only the linux version.
+
 Onpen an R session or RStudio and type:
 ```R
 install.packages("devtools")
@@ -42,25 +47,29 @@ library(devtools)
 install_github("elmerfer/ITSNdb")
 #load library
 library(ITSNdb)
-install_netMHCPan(choolse.file(), )
-```
-installNetMHCPan(file = "/home/.../myfavoritedir/netMHCpan-VERSION.Linux.tar.gz" , data = NULL, dir = "/where i whant/dir")
-installNetMHCIIPan(file = "/home/.../myfavoritedir/netMHCIIpan-VERSION.Linux.tar.gz" , data = NULL, dir = "/where i whant/dir")
-```
-It will print on console:
-
-`netMHCpan Installation OK`
-
-or
-
-`netMHCIIpan Installation OK`
-
-### Testing the library
-Please download and run the following R script file [test.rapiNetMHCpan](https://github.com/elmerfer/RAPInetMHCpan/blob/master/test.rapiNetMHCpan.R)
-
-## Installation
+#choose.file() will open a window selector to look for the downloaded file
+install_netMHCPan(choose.file(), dir = "/where i whant to install it/dir")
+#if success, the following message should appear
+netMHCpan Installation OK
 ```
 
+### Estimate binding affinity from a peptide
+```R
+data(ITSNdb)
+ITSNdb$Neoantigen[1]
+[1] "GRIAFFLKY"
+ITSNdb$HLA[1:2]
+[1] "HLA-B27:05" "HLA-B35:03"
+results <- RunNetMHCPan_peptides(peps=ITSNdb$Neoantigen[1], alleles = ITSNdb$HLA[1:2])
+results
+$`HLA-B27:05`
+  Pos         MHC   Peptide      Core Of Gp Gl Ip Il     Icore Identity  Score_EL %Rank_EL Score_BA %Rank_BA Aff(nM) BindLevel
+1   1 HLA-B*27:05 GRIAFFLKY GRIAFFLKY  0  0  0  0  0 GRIAFFLKY  PEPLIST 0.9810120    0.009 0.659218    0.103   39.93        SB
+
+$`HLA-B35:03`
+  Pos         MHC   Peptide      Core Of Gp Gl Ip Il     Icore Identity  Score_EL %Rank_EL Score_BA %Rank_BA  Aff(nM) BindLevel
+1   1 HLA-B*35:03 GRIAFFLKY GRIAFFLKY  0  0  0  0  0 GRIAFFLKY  PEPLIST 0.0000600   31.333 0.009315   55.345 45206.31      <NA>
+```
 
 
 ## Authors
