@@ -30,7 +30,7 @@ if succeed you will see something like this:
 
 if not installed try 'sudo apt-get install tcsh' and verify. 
 
-### Installation of netMHCpan and netMHCIIpan with RAPInetMHCpan into R
+### Installation of netMHCpan with ITSNdb into R
 Follow the instructions and fill the form to receive the rights to download [netMHCpan](https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1) 
 and save it in your favorite directory.
 ![Download](https://github.com/elmerfer/ITSNdb/blob/main/DownloadV4.1.png)
