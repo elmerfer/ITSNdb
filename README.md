@@ -1,13 +1,10 @@
 # The Immunenogenic Tumor Specific Neoantigen database
-The ITSNdb is a new  neoantigen database with know immunogenic and non immunogenic tumor specific antigenic peptides derived from genomic rearrangements such as single nucleotide variants (SNVs),  nucleotide insertions or deletions (INDELS), alternative splicing and/or gene fusion, among others, that may produce dysfunctional proteins by either non-synonymous alterations or changes in open reading frames. Then, processed by the proteasome they mey be presented on the cell surface bound to the MHC-I molecule (i.e., neoantigens) and, potentially, triggering an immune response if recognized by T cell receptors.
+The **ITSNdb** is a new  neoantigen database with know immunogenic and non immunogenic tumor specific antigenic peptides derived from genomic rearrangements such as single nucleotide variants (SNVs) that satisfy the following criteria:
+1. The wild type counterpart has been identified in the source protein
+2. The MHC-I presentation has benn experimentaly validated
+3. The positive or negative immunogenicity has beem experimentaly validated by, for instance, ELISPOT® 
 
-The ITSNdb is a manually curated neoantigen database created by means of a novel approach, where the peptide inclusion criteria are: 
-
-* peptides derived from non-silent somatic SNVs with their wild type (WT) peptide sequence counterpart referenced protein sequence
-* Experimentally validated binding to the MHC-I complex
-* Tested on immunogenic assays (i.e. tetramer titration and IFN-γ or TNF ELISPOT®). 
-
-Therefore, all peptides in the database have experimental confirmation of their positive/negative immunogenicity (classified as “Positive” and “Negative” neoantigens respectively).The neoantigens were collected and curated from published articles searched on PubMedTM using “neoantigen'' or “neoepitopes” as keywords. The ITSNdb only includes neoantigens whose inclusion criteria were explicitly described in its reference bibliography. 
+In this sence, all peptides in the database have experimental confirmation of their positive/negative immunogenicity (classified as “Positive” and “Negative” neoantigens respectively).The neoantigens were collected and curated from published articles searched on PubMedTM using “neoantigen'' or “neoepitopes” as keywords. The ITSNdb only includes neoantigens whose inclusion criteria were explicitly described in its reference bibliography. 
 
 ## Getting Started
 
