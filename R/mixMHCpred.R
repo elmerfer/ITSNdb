@@ -1,7 +1,10 @@
 ##install mixMHCpred
 
-.IntallMixMHCpred <- function(dir = "./"){
-  dir <- "/media/respaldo4t/Guada/"
+
+IntallMixMHCpred <- function(dir = "./"){
+  if(Sys.info()["sysname"]!="Linux"){
+    stop("ONLY for Linux")
+  }
   software <- ITSNdb:::.OpenConfigFile()
   if(is.null(software)==FALSE){
     if(is.null(software$mixMHCpred$command)==FALSE){
@@ -23,30 +26,104 @@
   software$mixMHCpred$main <- file.path(software$mixMHCpred$main,lfiles$Name[1])
   
   fpath <- file.path(software$mixMHCpred$main,"MixMHCpred")
-  con <- file(fpath,)
-  conf.file <- readLines(fpath)
+  file.exists(fpath)
+  con <- file(fpath)
+  conf.file <- readLines(con)
   id <- which(stringr::str_detect(conf.file, "lib_path="))
-  conf.file[id] <- paste0("lib_path=","\"",software$mixMHCpred$main,"/lib")
-  writeLines(conf.file, con=fpath)
+  conf.file[id] <- paste0("lib_path=","\"",software$mixMHCpred$main,"/lib","\"")
+  writeLines(conf.file, con=con)
+  close(con)
   
   system2(command = "g++", 
           args = c( file.path(software$mixMHCpred$main,"lib","MixMHCpred.cc"), 
                    paste0("-o ",file.path(software$mixMHCpred$main,"lib","MixMHCpred.x"))))
-  system2(command = "chmod", args = c("a=x", file.path(software$mixMHCpred$main,"MixMHCpred")))
+  
   
   software$mixMHCpred$command <- file.path(software$mixMHCpred$main,"MixMHCpred")
- system2(command = software$mixMHCpred$command , args = "-h")
-           
-           
-           c(paste0("-i ", file.path(software$mixMHCpred$main,"test","test.fa")),
-                                                         paste0("-o",file.path(software$mixMHCpred$main,"test","out.R.txt")),
-                                                         "- 0 A0101") ) 
+  system2(command="chmod", args=c("u=rwx,g=r,o=r", software$mixMHCpred$command))
+  sout <- system2(command = software$mixMHCpred$command , args = "-h", stdout = TRUE)
+  if(all(sout == "Usage: MixMHCpred -i INPUT_FILE -o OUTPUT_FILE -h LIST_OF_ALLELES")==FALSE){
+    stop("Installation ERROR")
+  }else{
+    cat(paste0("\nMixMHCpred has been succesfully installed"))
+  }
+
+  
+  ##-------------------------------------
+  software$PRIME$main <- dir
+  url.primer <- "https://github.com/GfellerLab/PRIME/archive/refs/heads/master.zip"
+  tmp.file <- file.path(software$PRIME$main, "PRIME.zip")
+  download.file(url = url.primer, method = "wget",destfile = tmp.file)
+  lfiles <- unzip(tmp.file,list=T)
+  unzip(tmp.file, junkpaths = F, exdir = software$PRIME$main)
+  
+  software$PRIME$main <- file.path(software$PRIME$main,lfiles$Name[1])
+  
+  fpath <- file.path(software$PRIME$main,"PRIME")
+  file.exists(fpath)
+  con <- file(fpath)
+  conf.file <- readLines(con)
+  id <- which(stringr::str_detect(conf.file, "lib_path="))
+  conf.file[id] <- paste0("lib_path=","\"",software$PRIME$main,"/lib","\"")
+  writeLines(conf.file, con=con)
+  close(con)
+  
+  system2(command = "g++", 
+          args = c( file.path(software$PRIME$main,"lib","PRIME.cc"), 
+                    paste0("-o ",file.path(software$PRIME$main,"lib","PRIME.x"))))
+  
+  
+  software$PRIME$command <- file.path(software$PRIME$main,"PRIME")
+  system2(command="chmod", args=c("u=rwx,g=r,o=r", software$PRIME$command))
+  sout <- system2(command = software$PRIME$command , args = "-h", stdout = TRUE)
+  
+  
+  system("/media/respaldo4t/Guada//PRIME-master/PRIME -i /media/respaldo4t/Guada/PRIME-master/test/test2.txt -a A0101 -o /media/respaldo4t/Guada/PRIME-master/test/outR.txt -mix /media/respaldo4t/Guada//MixMHCpred-master/MixMHCpred")
+  if(all(sout == "Usage:PRIME -i INPUT -a ALLELES -o OUTPUT ")==FALSE){
+    stop("Installation ERROR")
+  }else{
+    cat(paste0("\nPRIME has been succesfully installed"))
+  }  
+  .OpenConfigFile(software)
 }
 
-.WriteMixMHCpred.config <- function(fpath){
-  fpath <- "/media/respaldo4t/Guada/MixMHCpred-master/MixMHCpred"
-  conf.file <- readLines(fpath)
-  id <- which(stringr::str_detect(conf.file, "lib_path="))
-  conf.file[id] <- paste0()
-              
+RunPRIME <- function(pepFile){
+  pepFile <- "MyPatientsNeoantigenList.csv"
+  peps <- read.csv(pepFile,h=T)
+  if(all(c("Sample","Neoantigen","HLA") %in% colnames(peps) )==FALSE){
+    stop("colnames error: it shuould contain at least the following columns Sample,Neoantigen,HLA")
+  }
+  
+  peps$ID <- 1:nrow(peps)
+  HLA <- peps$HLA
+  HLA <- stringr::str_remove_all(HLA, "HLA-")
+  HLA <- stringr::str_remove_all(HLA, "\\*")
+  HLA <- stringr::str_remove_all(HLA, ":")
+  peps$HLAaux <- HLA
+  HLA.unique <- unique(HLA)
+  
+  imm.pred <-do.call(rbind,BiocParallel::bplapply(HLA.unique, function(hla){
+    ifile <- tempfile(fileext = ".txt")
+    ofile <- stringr::str_replace_all(tmp.file,".txt","_out.txt")
+    psample <- subset(peps, HLAaux==hla)
+    file.con <- file(ifile)
+    writeLines(psample$Neoantigen,con=file.con)
+    close(file.con)
+    system2(command = software$PRIME$command , args = c(paste0("-i ", ifile),
+                                                        paste0("-a ",hla),
+                                                        paste0("-o ",ofile),
+                                                        paste0("-mix ", software$mixMHCpred$command)))
+    rl <- read.table(file = ofile,h=T)
+    rl$HLA <- hla
+    colnames(rl) <- stringr::str_remove_all(colnames(rl),paste0("_",hla))
+    rl <- merge(psample,rl, by.x=c("Neoantigen","HLAaux"),by.y = c("Peptide","HLA"),sort = F)
+    rl$HLAaux<-NULL
+    file.remove(c(ifile,ofile))
+    return(rl)
+  }, BPPARAM = MulticoreParam()))
+  
+  imm.pred <- imm.pred[order(imm.pred$ID)]
+  imm.pred$ID <- NULL
+  return(imm.pred)
+  
 }
