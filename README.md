@@ -86,7 +86,12 @@ Cohort_results
 2  LPIQYEPVL Subject1 HLA-B35:03   1 HLA-B*35:03 LPIQYEPVL  0  0  0  0  0 LPIQYEPVL  PEPLIST 0.9816510    0.004 0.690369    0.008   28.51        SB
 3  KLILWRGLK Subject2 HLA-A03:01   1 HLA-A*03:01 KLILWRGLK  0  0  0  0  0 KLILWRGLK  PEPLIST 0.7217850    0.184 0.733193    0.049   17.94        SB
 ```
-
+## Running DeepImmuno
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elmerfer/ITSNdb/blob/main/Colab/DeepImmuno_Colab.ipynb)
+## Running MHCFlurry
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elmerfer/ITSNdb/blob/main/Colab/MHCFlurry_Colab.ipynb)
+## Running DeepHLApan
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elmerfer/ITSNdb/blob/main/Colab/DeepHLApan_Colab.ipynb)
 
 ## Authors
 * **Elmer A. Fernández - *Idea* - [Profile](https://www.researchgate.net/profile/Elmer_Fernandez) - [CIDIE]- [CONICET](http://www.conicet.gov.ar) - [UCC](http://www.ucc.edu.ar) 
