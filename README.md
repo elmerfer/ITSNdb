@@ -132,7 +132,7 @@ cohort_results
 3  KLILWRGLK Subject2 HLA-A03:01             0.132         0.108694                    0.336      A0301  0.132 0.108694         0.336
 ```
 
-## Estimate immunogtenic scores or affinity on peptide-HLA pairs from ITSNdb or cohort studies from DeepHLApan, DeepImmune and MHCflurry in Colab environments
+## Estimate immunogenic scores or affinities of peptide-HLA pairs from ITSNdb or cohort studies by using DeepHLApan, DeepImmune and MHCflurry in Colab environments
 
 
 
