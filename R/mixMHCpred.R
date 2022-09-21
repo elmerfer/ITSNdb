@@ -118,8 +118,8 @@ RunPRIME <- function(pepFile){
   HLA <- stringr::str_remove_all(HLA, ":")
   peps$HLAaux <- HLA
   HLA.unique <- unique(HLA)
-  
-  imm.pred <-do.call(rbind,BiocParallel::bplapply(HLA.unique, function(hla){
+  # BiocParallel::bp
+  imm.pred <-plyr::ldply(HLA.unique, function(hla){
     ifile <- tempfile(fileext = ".txt")
     ofile <- stringr::str_replace_all(tmp.file,".txt","_out.txt")
     psample <- subset(peps, HLAaux==hla)
@@ -136,10 +136,11 @@ RunPRIME <- function(pepFile){
     rl <- merge(psample,rl, by.x=c("Neoantigen","HLAaux"),by.y = c("Peptide","HLA"),sort = F)
     rl$HLAaux<-NULL
     file.remove(c(ifile,ofile))
+    # print(rl)
     return(rl)
-  }, BPPARAM = MulticoreParam()))
+  })#, BPPARAM = MulticoreParam())
   
-  imm.pred <- imm.pred[order(imm.pred$ID)]
+  imm.pred <- imm.pred[order(imm.pred$ID),]
   imm.pred$ID <- NULL
   return(imm.pred)
   
