@@ -19,6 +19,13 @@ library(ITSNdb)
 ##load the data 
 data(ITSNdb)
 ```
+## Here we provide several tools for binding affinity predictions or immunogenicity score prediction in R (netMHCpan, PRIME) or through Colab. In all cases the same file can be used to feed any platform, thus allowing esy comparison of the different methods
+Inorder to feed the methods, the following peptide-HLA pairs should be provided
+
+### Data Format [See Sample](https://github.com/elmerfer/ITSNdb/blob/main/MyPatientsNeoantigenList.csv)
+![DataFormat](https://github.com/elmerfer/ITSNdb/blob/main/DataFormat.png)
+
+
 ## Run the netMHCpan version 4.1 in R using the ITSNdb
 The ITSNdb library allows the installation and use of the netMHCpan version 4.1 software to predict peptide binding affinity to MHC-I molecules.
 (up to now only available for Linux, Mac in progress)
@@ -125,10 +132,8 @@ cohort_results
 3  KLILWRGLK Subject2 HLA-A03:01             0.132         0.108694                    0.336      A0301  0.132 0.108694         0.336
 ```
 
-## Estimate immunogtenic scores or affinity peptide-HLA pairs from ITSNdb or cohort studies from DeepHLApan, DeepImmune and MHCflurry in Colab environments
+## Estimate immunogtenic scores or affinity on peptide-HLA pairs from ITSNdb or cohort studies from DeepHLApan, DeepImmune and MHCflurry in Colab environments
 
-### Data Format
-![DataFormat](https://github.com/elmerfer/ITSNdb/blob/main/DataFormat.png)
 
 
 ## Running DeepImmuno
