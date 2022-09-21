@@ -1,7 +1,7 @@
 library(BiocParallel)
 #' install_netMHCPan 4.1
 #' This function will install the netMHCpan 4.1 in your local computer. Only for linux environment.
-#' Please check tha "tsch" is already installed in your machine.
+#' Please check that "tsch" is already installed in your machine.
 #' You should first download the netMHCpan version 4.1b from 
 #' \code{\link[netMHCpan web site]{https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1}}
 #' @param file = this should be the downloaded tar.gz file "netMHCpan-4.1b.Linux.tar.gz", requested from 
@@ -11,7 +11,7 @@ library(BiocParallel)
 #' @return 
 #' on success the following mss will be printed "netMHCpan Installation OK"
 #' @export
-install_netMHCPan <- function(file = NULL , dir = "./"){
+Install_netMHCPan <- function(file = NULL , dir = "./"){
   software <- .OpenConfigFile()
   if(is.null(software)==FALSE){
     if(is.null(software$netMHCpan$command)==TRUE){

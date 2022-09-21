@@ -1,7 +1,13 @@
-##install mixMHCpred
 
-
-IntallMixMHCpred <- function(dir = "./"){
+#' Install_PRIME v 2.2
+#' This function will install PRIME (PRedictor of class I IMmunogenic Epitopes) in your local computer. Up to now only for linux environment.
+#' \code{\link[PRIME web site]{https://github.com/GfellerLab/PRIME}}
+#' @param dir = "./", the path to the directory where do you whant to store your netMHCpan. Then it will be 
+#' accesible blindly
+#' @return 
+#' on success the following msg will be printed "PRIME has been successfully installed"
+#' @export
+Install_PRIME <- function(dir = "./"){
   if(Sys.info()["sysname"]!="Linux"){
     stop("ONLY for Linux")
   }
@@ -42,7 +48,7 @@ IntallMixMHCpred <- function(dir = "./"){
   software$mixMHCpred$command <- file.path(software$mixMHCpred$main,"MixMHCpred")
   system2(command="chmod", args=c("u=rwx,g=r,o=r", software$mixMHCpred$command))
   sout <- system2(command = software$mixMHCpred$command , args = "-h", stdout = TRUE)
-  if(all(sout == "Usage: MixMHCpred -i INPUT_FILE -o OUTPUT_FILE -h LIST_OF_ALLELES")==FALSE){
+  if(any(sout == "Usage: MixMHCpred -i INPUT_FILE -o OUTPUT_FILE -h LIST_OF_ALLELES")==FALSE){
     stop("Installation ERROR")
   }else{
     cat(paste0("\nMixMHCpred has been succesfully installed"))
@@ -78,8 +84,8 @@ IntallMixMHCpred <- function(dir = "./"){
   sout <- system2(command = software$PRIME$command , args = "-h", stdout = TRUE)
   
   
-  system("/media/respaldo4t/Guada//PRIME-master/PRIME -i /media/respaldo4t/Guada/PRIME-master/test/test2.txt -a A0101 -o /media/respaldo4t/Guada/PRIME-master/test/outR.txt -mix /media/respaldo4t/Guada//MixMHCpred-master/MixMHCpred")
-  if(all(sout == "Usage:PRIME -i INPUT -a ALLELES -o OUTPUT ")==FALSE){
+  
+  if(any(sout == "Usage:PRIME -i INPUT -a ALLELES -o OUTPUT ")==FALSE){
     stop("Installation ERROR")
   }else{
     cat(paste0("\nPRIME has been succesfully installed"))
@@ -87,6 +93,17 @@ IntallMixMHCpred <- function(dir = "./"){
   .OpenConfigFile(software)
 }
 
+#' RunPRIME
+#' It will runs PRIME immunogenic predictions for peptides-HLA pairs stored in a file
+#' The file (a text comma separated file) should have the following columns
+#' Sample,Neoantigen,HLA
+#' Sample: Identify the sample, patients or any other useful annotation
+#' Neoantigen: the neoantigen sequence (8 to 14 mer length)
+#' HLA : the specif allele for such neoantigen
+#' Any further column is allowed and will be kept on the final result data frame
+#' @param pepFile the full path to the peptide-HLA pairs
+#' @export
+#' 
 RunPRIME <- function(pepFile){
   pepFile <- "MyPatientsNeoantigenList.csv"
   peps <- read.csv(pepFile,h=T)
