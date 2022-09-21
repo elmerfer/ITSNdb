@@ -24,7 +24,7 @@ The ITSNdb library allows the installation and use of the netMHCpan version 4.1 
 (up to now only available for Linux, Mac in progress)
 ### Check if the appropriate C shell is installed in your machine
 To verify if you have it in your machine, please type from a console terminal the following command 
-'tsch --version'
+'tcsh --version'
 if succeed you will see something like this:
 ![tsch output](https://github.com/elmerfer/ITSNdb/blob/main/tsch.shell.png)
 
@@ -44,8 +44,8 @@ library(devtools)
 install_github("elmerfer/ITSNdb")
 #load library
 library(ITSNdb)
-#choose.file() will open a window selector to look for the downloaded file
-install_netMHCPan(choose.file(), dir = "/where i whant to install it/dir")
+#file.choose() will open a window selector to look for the downloaded file
+Install_netMHCPan(file.choose(), dir = "/where i whant to install it/dir")
 #if success, the following message should appear
 netMHCpan Installation OK
 ```
@@ -86,6 +86,49 @@ Cohort_results
 2  LPIQYEPVL Subject1 HLA-B35:03   1 HLA-B*35:03 LPIQYEPVL  0  0  0  0  0 LPIQYEPVL  PEPLIST 0.9816510    0.004 0.690369    0.008   28.51        SB
 3  KLILWRGLK Subject2 HLA-A03:01   1 HLA-A*03:01 KLILWRGLK  0  0  0  0  0 KLILWRGLK  PEPLIST 0.7217850    0.184 0.733193    0.049   17.94        SB
 ```
+## Installation of [PRIME](https://github.com/GfellerLab/PRIME) (PRedictor of class I IMmunogenic Epitopes) in R using the ITSNdb
+PRIME is a PRedictor of class I IMmunogenic Epitopes. It combines predictions of binding to HLA-I molecules and propensity for TCR recognition.
+
+Here we provide an R interface to install and use PRIME in your local machine.
+
+### Install PRIME and their dependencies
+#### Up to now only the linux version.
+
+Onpen an R session or RStudio and type:
+```R
+install.packages("devtools")
+library(devtools)
+install_github("elmerfer/ITSNdb")
+#load library
+library(ITSNdb)
+Install_PRIME(dir = "/where i whant to install it/dir")
+#if success, the following message should appear
+PRIME Installation OK
+```
+### Predict peptide-MHC-I binding affinities and immunogenicity scores from a cohort study
+```R
+## we will build a simulated cohort study with two subjects
+df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
+df.to.test
+    Sample Neoantigen        HLA
+1 Subject1  GRIAFFLKY HLA-B27:05
+2 Subject1  LPIQYEPVL HLA-B35:03
+3 Subject2  KLILWRGLK HLA-A03:01
+# we will save it in a comma separated text file in the working directory
+write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
+#run predictions 
+Cohort_results <- RunPRIME(pepsFile = "MyPatientsNeoantigenList.csv")
+cohort_results
+  Neoantigen   Sample        HLA X.Rank_bestAllele Score_bestAllele X.RankBinding_bestAllele BestAllele X.Rank    Score X.RankBinding
+1  GRIAFFLKY Subject1 HLA-B27:05             0.001         0.302405                    0.012      B2705  0.001 0.302405         0.012
+2  LPIQYEPVL Subject1 HLA-B35:03             0.001         0.312395                    0.001      B3503  0.001 0.312395         0.001
+3  KLILWRGLK Subject2 HLA-A03:01             0.132         0.108694                    0.336      A0301  0.132 0.108694         0.336
+```
+
+## Estimate immunogtenic scores or affinity peptide-HLA pairs from ITSNdb or cohort studies from DeepHLApan, DeepImmune and MHCflurry in Colab environments
+
+### Data Format
+
 ## Running DeepImmuno
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elmerfer/ITSNdb/blob/main/Colab/DeepImmuno_Colab.ipynb)
 ## Running MHCFlurry
