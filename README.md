@@ -124,8 +124,8 @@ df.to.test
 # we will save it in a comma separated text file in the working directory
 write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
 #run predictions 
-Cohort_results <- RunPRIME(pepsFile = "MyPatientsNeoantigenList.csv")
-cohort_results
+Cohort_results <- RunPRIME(pepFile = "MyPatientsNeoantigenList.csv")
+Cohort_results
   Neoantigen   Sample        HLA X.Rank_bestAllele Score_bestAllele X.RankBinding_bestAllele BestAllele X.Rank    Score X.RankBinding
 1  GRIAFFLKY Subject1 HLA-B27:05             0.001         0.302405                    0.012      B2705  0.001 0.302405         0.012
 2  LPIQYEPVL Subject1 HLA-B35:03             0.001         0.312395                    0.001      B3503  0.001 0.312395         0.001
