@@ -105,7 +105,7 @@ Install_PRIME <- function(dir = "./"){
 #' @export
 #' 
 RunPRIME <- function(pepFile){
-  pepFile <- "MyPatientsNeoantigenList.csv"
+  software <- ITSNdb:::.OpenConfigFile()
   peps <- read.csv(pepFile,h=T)
   if(all(c("Sample","Neoantigen","HLA") %in% colnames(peps) )==FALSE){
     stop("colnames error: it shuould contain at least the following columns Sample,Neoantigen,HLA")
