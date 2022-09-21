@@ -128,6 +128,8 @@ cohort_results
 ## Estimate immunogtenic scores or affinity peptide-HLA pairs from ITSNdb or cohort studies from DeepHLApan, DeepImmune and MHCflurry in Colab environments
 
 ### Data Format
+![DataFormat](https://github.com/elmerfer/ITSNdb/blob/main/DataFormat.png)
+
 
 ## Running DeepImmuno
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elmerfer/ITSNdb/blob/main/Colab/DeepImmuno_Colab.ipynb)
