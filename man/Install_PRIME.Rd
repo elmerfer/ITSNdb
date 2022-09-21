@@ -6,7 +6,11 @@
 This function will install PRIME (PRedictor of class I IMmunogenic Epitopes) in your local computer. Up to now only for linux environment.
 \code{\link[PRIME web site]{https://github.com/GfellerLab/PRIME}}}
 \usage{
-Install_PRIME(dir = "./")
+\notrun{
+library(ITSNdb)
+dir.path <- "my/directory"
+Install_PRIME(dir = dir.path)
+}
 }
 \arguments{
 \item{dir}{= "./", the path to the directory where do you whant to store your netMHCpan. Then it will be 

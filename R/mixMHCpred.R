@@ -7,6 +7,12 @@
 #' @return 
 #' on success the following msg will be printed "PRIME has been successfully installed"
 #' @export
+#' @usage 
+#' \notrun{
+#' library(ITSNdb)
+#' dir.path <- "my/directory"
+#' Install_PRIME(dir = dir.path)
+#' }
 Install_PRIME <- function(dir = "./"){
   if(Sys.info()["sysname"]!="Linux"){
     stop("ONLY for Linux")
@@ -90,11 +96,11 @@ Install_PRIME <- function(dir = "./"){
   }else{
     cat(paste0("\nPRIME has been succesfully installed"))
   }  
-  .OpenConfigFile(software)
+  invisible(.OpenConfigFile(software))
 }
 
 #' RunPRIME
-#' It will runs PRIME immunogenic predictions for peptides-HLA pairs stored in a file
+#' It will run PRIME immunogenic predictions for peptides-HLA pairs stored in a file
 #' The file (a text comma separated file) should have the following columns
 #' Sample,Neoantigen,HLA
 #' Sample: Identify the sample, patients or any other useful annotation
@@ -103,6 +109,14 @@ Install_PRIME <- function(dir = "./"){
 #' Any further column is allowed and will be kept on the final result data frame
 #' @param pepFile the full path to the peptide-HLA pairs
 #' @export
+#' @return a data frame with the uploaded peptide_HLA pairs with extra columns added by the PRIME output
+#' @usage 
+#' \notrun{
+#' df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
+#' write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
+#' run predictions 
+#' Cohort_results <- RunPRIME(pepsFile = "MyPatientsNeoantigenList.csv")
+#' }
 #' 
 RunPRIME <- function(pepFile){
   software <- ITSNdb:::.OpenConfigFile()

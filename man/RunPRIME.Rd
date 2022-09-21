@@ -3,7 +3,7 @@
 \name{RunPRIME}
 \alias{RunPRIME}
 \title{RunPRIME
-It will runs PRIME immunogenic predictions for peptides-HLA pairs stored in a file
+It will run PRIME immunogenic predictions for peptides-HLA pairs stored in a file
 The file (a text comma separated file) should have the following columns
 Sample,Neoantigen,HLA
 Sample: Identify the sample, patients or any other useful annotation
@@ -11,14 +11,22 @@ Neoantigen: the neoantigen sequence (8 to 14 mer length)
 HLA : the specif allele for such neoantigen
 Any further column is allowed and will be kept on the final result data frame}
 \usage{
-RunPRIME(pepFile)
+\notrun{
+df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
+write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
+run predictions 
+Cohort_results <- RunPRIME(pepsFile = "MyPatientsNeoantigenList.csv")
+}
 }
 \arguments{
 \item{pepFile}{the full path to the peptide-HLA pairs}
 }
+\value{
+a data frame with the uploaded peptide_HLA pairs with extra columns added by the PRIME output
+}
 \description{
 RunPRIME
-It will runs PRIME immunogenic predictions for peptides-HLA pairs stored in a file
+It will run PRIME immunogenic predictions for peptides-HLA pairs stored in a file
 The file (a text comma separated file) should have the following columns
 Sample,Neoantigen,HLA
 Sample: Identify the sample, patients or any other useful annotation
