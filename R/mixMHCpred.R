@@ -121,7 +121,7 @@ RunPRIME <- function(pepFile){
   # BiocParallel::bp
   imm.pred <-plyr::ldply(HLA.unique, function(hla){
     ifile <- tempfile(fileext = ".txt")
-    ofile <- stringr::str_replace_all(tmp.file,".txt","_out.txt")
+    ofile <- stringr::str_replace_all(ifile,".txt","_out.txt")
     psample <- subset(peps, HLAaux==hla)
     file.con <- file(ifile)
     writeLines(psample$Neoantigen,con=file.con)
