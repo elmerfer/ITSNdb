@@ -91,9 +91,10 @@ def run(filedir=None, convert=True):
   #merge result with original df
   os.system("mv outputs/deepimmuno-cnn-result.txt outputs/deepimmuno-cnn-result.csv")
   dfresult = pd.read_csv("outputs/deepimmuno-cnn-result.csv", sep="\t")
+  dfresult = dfresult.add_prefix('DI_')
   dfconcat = pd.concat([pd.read_csv(filedir), dfresult.iloc[:, 2:]], axis="columns")
   with open(f"{filedir[:-4]}_DI_result.csv", 'w') as outfile:
-      outfile.write(dfconcat.to_csv())
+      outfile.write(dfconcat.to_csv(index=False))
       outfile.close()
   from google.colab import files
   files.download(f"{filedir[:-4]}_DI_result.csv")
