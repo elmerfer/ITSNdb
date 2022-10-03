@@ -86,12 +86,20 @@ df.to.test
 # we will save it in a comma separated text file in the working directory
 write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
 #run predictions 
-Cohort_results <- RunNetMHCPan_pMHC(pMHCfile = "MyPatientsNeoantigenList.csv")
+Cohort_results <- RunNetMHCPan(pepFile = "MyPatientsNeoantigenList.csv")
 Cohort_results
-  Neoantigen   Sample        HLA Pos         MHC      Core Of Gp Gl Ip Il     Icore Identity  Score_EL %Rank_EL Score_BA %Rank_BA Aff(nM) BindLevel
-1  GRIAFFLKY Subject1 HLA-B27:05   1 HLA-B*27:05 GRIAFFLKY  0  0  0  0  0 GRIAFFLKY  PEPLIST 0.9810120    0.009 0.659218    0.103   39.93        SB
-2  LPIQYEPVL Subject1 HLA-B35:03   1 HLA-B*35:03 LPIQYEPVL  0  0  0  0  0 LPIQYEPVL  PEPLIST 0.9816510    0.004 0.690369    0.008   28.51        SB
-3  KLILWRGLK Subject2 HLA-A03:01   1 HLA-A*03:01 KLILWRGLK  0  0  0  0  0 KLILWRGLK  PEPLIST 0.7217850    0.184 0.733193    0.049   17.94        SB
+  Neoantigen   Sample        HLA NetMCpan_Pos NetMCpan_MHC NetMCpan_Core NetMCpan_Of NetMCpan_Gp NetMCpan_Gl NetMCpan_Ip NetMCpan_Il
+1  GRIAFFLKY Subject1 HLA-B27:05            1  HLA-B*27:05     GRIAFFLKY           0           0           0           0           0
+2  LPIQYEPVL Subject1 HLA-B35:03            1  HLA-B*35:03     LPIQYEPVL           0           0           0           0           0
+3  KLILWRGLK Subject2 HLA-A03:01            1  HLA-A*03:01     KLILWRGLK           0           0           0           0           0
+  NetMCpan_Icore NetMCpan_Identity NetMCpan_Score_EL NetMCpan_%Rank_EL NetMCpan_Score_BA NetMCpan_%Rank_BA NetMCpan_Aff(nM)
+1      GRIAFFLKY           PEPLIST         0.9810120             0.009          0.659218             0.103            39.93
+2      LPIQYEPVL           PEPLIST         0.9816510             0.004          0.690369             0.008            28.51
+3      KLILWRGLK           PEPLIST         0.7217850             0.184          0.733193             0.049            17.94
+  NetMCpan_BindLevel
+1                 SB
+2                 SB
+3                 SB
 ```
 ## Installation of [PRIME](https://github.com/GfellerLab/PRIME) (PRedictor of class I IMmunogenic Epitopes) in R using the ITSNdb
 PRIME is a PRedictor of class I IMmunogenic Epitopes. It combines predictions of binding to HLA-I molecules and propensity for TCR recognition.
@@ -126,12 +134,39 @@ write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
 #run predictions 
 Cohort_results <- RunPRIME(pepFile = "MyPatientsNeoantigenList.csv")
 Cohort_results
-  Neoantigen   Sample        HLA X.Rank_bestAllele Score_bestAllele X.RankBinding_bestAllele BestAllele X.Rank    Score X.RankBinding
-1  GRIAFFLKY Subject1 HLA-B27:05             0.001         0.302405                    0.012      B2705  0.001 0.302405         0.012
-2  LPIQYEPVL Subject1 HLA-B35:03             0.001         0.312395                    0.001      B3503  0.001 0.312395         0.001
-3  KLILWRGLK Subject2 HLA-A03:01             0.132         0.108694                    0.336      A0301  0.132 0.108694         0.336
+  Neoantigen   Sample        HLA PRIME_Rank_bestAllele PRIME_Score_bestAllele PRIME_RankBinding_bestAllele PRIME_BestAllele PRIME_Rank
+1  GRIAFFLKY Subject1 HLA-B27:05                 0.001               0.302405                        0.012            B2705      0.001
+2  LPIQYEPVL Subject1 HLA-B35:03                 0.001               0.312395                        0.001            B3503      0.001
+3  KLILWRGLK Subject2 HLA-A03:01                 0.132               0.108694                        0.336            A0301      0.132
+  PRIME_Score PRIME_RankBinding
+1    0.302405             0.012
+2    0.312395             0.001
+3    0.108694             0.336
 ```
 
+### You can also predict only binding affinity scores trough mixMHCpred (automatically installed when installing PRIME)
+```R
+## we will build a simulated cohort study with two subjects
+df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
+df.to.test
+    Sample Neoantigen        HLA
+1 Subject1  GRIAFFLKY HLA-B27:05
+2 Subject1  LPIQYEPVL HLA-B35:03
+3 Subject2  KLILWRGLK HLA-A03:01
+# we will save it in a comma separated text file in the working directory
+write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
+#run predictions 
+Cohort_results <- RunMixMHCpred(pepFile = "MyPatientsNeoantigenList.csv")
+Cohort_results
+    Neoantigen   Sample        HLA MixMHCpred_Score_bestAllele MixMHCpred_BestAllele MixMHCpred_Rank_bestAllele MixMHCpred_Score
+1  GRIAFFLKY Subject1 HLA-B27:05                    0.498937                 B2705                  0.0118114         0.498937
+2  LPIQYEPVL Subject1 HLA-B35:03                    1.243759                 B3503                  0.0010000         1.243759
+3  KLILWRGLK Subject2 HLA-A03:01                   -0.428836                 A0301                  0.3362680        -0.428836
+  MixMHCpred_Rank
+1       0.0118114
+2       0.0010000
+3       0.3362680
+```
 ## Estimate immunogenic scores or affinities of peptide-HLA pairs from ITSNdb or cohort studies by using DeepHLApan, DeepImmune and MHCflurry in Colab environments
 
 
