@@ -80,7 +80,6 @@ def run(dir_string=None, convert=True):
   dfresult = pd.read_csv(f"{output}_MHC_results.csv")
   #it does not need result column renaming
   dfconcat = pd.concat([pd.read_csv(dir_string), dfresult.iloc[:, 2:]], axis="columns")
-  dfconcat = dfconcat.iloc[:, 1:] #remove now unneeded column
   with open(f"{output}_MHC_results.csv", 'w') as outfile:
       outfile.write(dfconcat.to_csv(index=False))
       outfile.close()
