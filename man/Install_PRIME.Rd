@@ -6,7 +6,7 @@
 This function will install PRIME (PRedictor of class I IMmunogenic Epitopes) in your local computer. Up to now only for linux environment.
 \code{\link[PRIME web site]{https://github.com/GfellerLab/PRIME}}}
 \usage{
-\notrun{
+\dontrun{
 library(ITSNdb)
 dir.path <- "my/directory"
 Install_PRIME(dir = dir.path)
