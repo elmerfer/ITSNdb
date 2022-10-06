@@ -8,7 +8,7 @@
 #' on success the following msg will be printed "PRIME has been successfully installed"
 #' @export
 #' @usage 
-#' \notrun{
+#' \dontrun{
 #' library(ITSNdb)
 #' dir.path <- "my/directory"
 #' Install_PRIME(dir = dir.path)
@@ -111,7 +111,7 @@ Install_PRIME <- function(dir = "./"){
 #' @export
 #' @return a data frame with the uploaded peptide_HLA pairs with extra columns added by the PRIME output
 #' @usage 
-#' \notrun{
+#' \dontrun{
 #' df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
 #' write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
 #' run predictions 
@@ -132,6 +132,7 @@ RunPRIME <- function(pepFile){
   HLA <- stringr::str_remove_all(HLA, ":")
   peps$HLAaux <- HLA
   HLA.unique <- unique(HLA)
+  orig.colnames <- colnames(peps)
   # BiocParallel::bp
   imm.pred <-plyr::ldply(HLA.unique, function(hla){
     ifile <- tempfile(fileext = ".txt")
@@ -151,11 +152,78 @@ RunPRIME <- function(pepFile){
     rl$HLAaux<-NULL
     file.remove(c(ifile,ofile))
     # print(rl)
+    
     return(rl)
   })#, BPPARAM = MulticoreParam())
   
   imm.pred <- imm.pred[order(imm.pred$ID),]
   imm.pred$ID <- NULL
+  colnames(imm.pred)[!c(colnames(imm.pred) %in% orig.colnames)] <- paste0("PRIME_",colnames(imm.pred)[!c(colnames(imm.pred) %in% orig.colnames)])
+  colnames(imm.pred) <- stringr::str_remove_all(colnames(imm.pred),"X.")
+  return(imm.pred)
+  
+}
+
+
+#' RunMixMHCpred
+#' It will run MixMHCpred binding predictions for peptides-HLA pairs stored in a file
+#' The file (a text comma separated file) should have the following columns
+#' Sample,Neoantigen,HLA
+#' Sample: Identify the sample, patients or any other useful annotation
+#' Neoantigen: the neoantigen sequence (8 to 14 mer length)
+#' HLA : the specif allele for such neoantigen
+#' Any further column is allowed and will be kept on the final result data frame
+#' @param pepFile the full path to the peptide-HLA pairs
+#' @export
+#' @return a data frame with the uploaded peptide_HLA pairs with extra columns added by the PRIME output
+#' @usage 
+#' \dontrun{
+#' df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
+#' write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
+#' run predictions 
+#' Cohort_results <- RunPRIME(pepsFile = "MyPatientsNeoantigenList.csv")
+#' }
+#' 
+RunMixMHCpred <- function(pepFile){
+  software <- ITSNdb:::.OpenConfigFile()
+  peps <- read.csv(pepFile,h=T)
+  if(all(c("Sample","Neoantigen","HLA") %in% colnames(peps) )==FALSE){
+    stop("colnames error: it shuould contain at least the following columns Sample,Neoantigen,HLA")
+  }
+  
+  peps$ID <- 1:nrow(peps)
+  HLA <- peps$HLA
+  HLA <- stringr::str_remove_all(HLA, "HLA-")
+  HLA <- stringr::str_remove_all(HLA, "\\*")
+  HLA <- stringr::str_remove_all(HLA, ":")
+  peps$HLAaux <- HLA
+  HLA.unique <- unique(HLA)
+  orig.colnames <- colnames(peps)
+  # BiocParallel::bp
+  imm.pred <-plyr::ldply(HLA.unique, function(hla){
+    ifile <- tempfile(fileext = ".txt")
+    ofile <- stringr::str_replace_all(ifile,".txt","_out.txt")
+    psample <- subset(peps, HLAaux==hla)
+    file.con <- file(ifile)
+    writeLines(psample$Neoantigen,con=file.con)
+    close(file.con)
+    system2(command = software$mixMHCpred$command , args = c(paste0("-i ", ifile),
+                                                        paste0("-a ",hla),
+                                                        paste0("-o ",ofile)))
+    rl <- read.table(file = ofile,h=T)
+    rl$HLA <- hla
+    colnames(rl) <- stringr::str_remove_all(colnames(rl),paste0("_",hla))
+    rl <- merge(psample,rl, by.x=c("Neoantigen","HLAaux"),by.y = c("Peptide","HLA"),sort = F)
+    rl$HLAaux<-NULL
+    file.remove(c(ifile,ofile))
+    # print(rl)
+    return(rl)
+  })#, BPPARAM = MulticoreParam())
+  
+  imm.pred <- imm.pred[order(imm.pred$ID),]
+  imm.pred$ID <- NULL
+  colnames(imm.pred)[!c(colnames(imm.pred) %in% orig.colnames)] <- paste0("MixMHCpred_",colnames(imm.pred)[!c(colnames(imm.pred) %in% orig.colnames)])
+  colnames(imm.pred) <- stringr::str_remove_all(colnames(imm.pred),"X.")
   return(imm.pred)
   
 }

@@ -3,6 +3,7 @@
 export(.GetMHCgeneList)
 export(Install_PRIME)
 export(Install_netMHCPan)
-export(RunNetMHCPan_pMHC)
+export(RunMixMHCpred)
+export(RunNetMHCPan)
 export(RunNetMHCPan_peptides)
 export(RunPRIME)

@@ -78,9 +78,10 @@ def run(dir_string=None, convert=True):
 
   #merge result with original df
   dfresult = pd.read_csv(f"{output}_MHC_results.csv")
+  #it does not need result column renaming
   dfconcat = pd.concat([pd.read_csv(dir_string), dfresult.iloc[:, 2:]], axis="columns")
   with open(f"{output}_MHC_results.csv", 'w') as outfile:
-      outfile.write(dfconcat.to_csv())
+      outfile.write(dfconcat.to_csv(index=False))
       outfile.close()
   from google.colab import files
   files.download(f"{output}_MHC_results.csv")
