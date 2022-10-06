@@ -1,10 +1,10 @@
 # The Immunenogenic Tumor Specific Neoantigen database
-The **ITSNdb** is a new  neoantigen database with know immunogenic and non immunogenic tumor specific antigenic peptides derived from genomic rearrangements such as single nucleotide variants (SNVs) that satisfy the following criteria:
+The **ITSNdb** is a new  neoantigen database with know immunogenic and non immunogenic tumor specific antigenic peptides derived from genomic rearrangements, such as single nucleotide variants (SNVs), that satisfy the following criteria:
 1. The wild type counterpart has been identified in the source protein
 2. The MHC-I presentation has benn experimentaly validated
 3. The positive or negative immunogenicity has beem experimentaly validated by, for instance, ELISPOT® 
 
-In this sence, all peptides in the database have experimental confirmation of their positive/negative immunogenicity (classified as “Positive” and “Negative” neoantigens respectively).The neoantigens were collected and curated from published articles searched on PubMedTM using “neoantigen'' or “neoepitopes” as keywords. The ITSNdb only includes neoantigens whose inclusion criteria were explicitly described in its reference bibliography. 
+In this sence, all peptides in the database have experimental confirmation of their positive/negative immunogenicity (classified as “Positive” and “Negative” neoantigens respectively) as well as their cell surface presentation.The neoantigens were collected and curated from published articles searched on PubMedTM using “neoantigen'' or “neoepitopes” as keywords. The ITSNdb only includes neoantigens whose inclusion criteria were explicitly described in its reference bibliography. 
 
 ## Getting Started
 
