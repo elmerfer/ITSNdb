@@ -19,10 +19,12 @@ library(ITSNdb)
 ##load the data 
 data(ITSNdb)
 ```
-## Here we provide several tools for binding affinity predictions or immunogenicity score prediction in R (netMHCpan, PRIME) or through Colab. In all cases the same file can be used to feed any platform, thus allowing easy comparison of the different methods
-Inorder to feed the methods, the following peptide-HLA pairs should be provided
+## Peptide binding affinity and/or immunogenicity predictors included in the ITSNdb package 
+Here we provide several tools for binding affinity prediction or immunogenicity score prediction in R (netMHCpan, PRIME) or through [Colab](https://colab.research.google.com/). In all cases the same file can be used to feed any platform, thus allowing easy comparison of the different methods
 
 ### Data Format [See Sample](https://github.com/elmerfer/ITSNdb/blob/main/MyPatientsNeoantigenList.csv)
+In order to feed the methods, the file should contain peptide-HLA pairs with the following format
+
 ![DataFormat](https://github.com/elmerfer/ITSNdb/blob/main/DataFormat.png)
 
 
