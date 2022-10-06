@@ -20,7 +20,12 @@ library(ITSNdb)
 data(ITSNdb)
 ```
 ## Peptide binding affinity and/or immunogenicity predictors included in the ITSNdb package 
-Here, in order to facilitate the exploration of state of the art tools for binding affinity prediction or immunogenicity score prediction, we implement several easy to use R interfaces for [netMHCpan](https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1), mixMHCpred and [PRIME](https://github.com/GfellerLab/PRIME) or through [Colab](https://colab.research.google.com/) [MHCflurry](https://openvax.github.io/mhcflurry/intro.html), [DeepImmune](https://github.com/frankligy/DeepImmuno) and [DeepHLApan](https://github.com/jiujiezz/deephlapan). In all cases the same file can be used to feed any platform, thus allowing easy comparison of the different methods. The R and Colab interfaces were implemented to facilitate the analisis of subject specific peptide-HLA pair list.
+Here, in order to facilitate the exploration of state of the art tools for binding affinity prediction or immunogenicity score prediction, we implement easy to use interfaces for peptide-HLA binding affinity or immunogenicity prediction:
+
+* Through R: [netMHCpan](https://services.healthtech.dtu.dk/service.php?NetMHCpan-4.1), [PRIME & mixMHCpred](https://github.com/GfellerLab/PRIME) and The [Class I Immunogenicity IEDB predictor](http://tools.iedb.org/immunogenicity/result/)
+* Through [Colab](https://colab.research.google.com/) : [MHCflurry](https://openvax.github.io/mhcflurry/intro.html), [DeepImmune](https://github.com/frankligy/DeepImmuno) and [DeepHLApan](https://github.com/jiujiezz/deephlapan). 
+
+In all cases the same file can be used to feed any platform, thus allowing easy comparison of the different methods. The R and Colab interfaces were implemented to facilitate the analisis of subject specific peptide-HLA pair list.
 
 ### Data Format [See Sample](https://github.com/elmerfer/ITSNdb/blob/main/MyPatientsNeoantigenList.csv)
 In order to feed the methods, the file should contain peptide-HLA pairs with the following format
@@ -169,6 +174,27 @@ Cohort_results
 2       0.0010000
 3       0.3362680
 ```
+
+## Estimating immunogenicity score by means of the Class I Immunogenicity IEDB function developped by [Calis et al](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3808449/)
+```R
+## we will build a simulated cohort study with two subjects
+df.to.test <- data.frame(Sample = c("Subject1","Subject1","Subject2"), Neoantigen=ITSNdb$Neoantigen[1:3],HLA = ITSNdb$HLA[1:3])
+df.to.test
+    Sample Neoantigen        HLA
+1 Subject1  GRIAFFLKY HLA-B27:05
+2 Subject1  LPIQYEPVL HLA-B35:03
+3 Subject2  KLILWRGLK HLA-A03:01
+# we will save it in a comma separated text file in the working directory
+write.csv(df.to.test,file="MyPatientsNeoantigenList.csv",quote=F, row.names = F)
+#run predictions 
+Cohort_results <- RunClassIImmunogenicity(pepFile = "MyPatientsNeoantigenList.csv")
+Cohort_results
+    Sample Neoantigen        HLA   CIImm
+1 Subject1  GRIAFFLKY HLA-B27:05 0.17141
+2 Subject1  LPIQYEPVL HLA-B35:03 0.03205
+3 Subject2  KLILWRGLK HLA-A03:01 0.31858
+```
+
 ## Estimate immunogenic scores or affinities of peptide-HLA pairs from ITSNdb or cohort studies by using DeepHLApan, DeepImmune and MHCflurry in Colab environments
 
 
