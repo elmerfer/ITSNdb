@@ -20,7 +20,7 @@ Install_PRIME <- function(dir = "./"){
   software <- ITSNdb:::.OpenConfigFile()
   if(is.null(software)==FALSE){
     if(is.null(software$mixMHCpred$command)==FALSE){
-      stop("\nmixMHCpred already installed")
+      stop("\nPRIME & mixMHCpred already installed")
     }else{
       software$mixMHCpred$main <- dir
     }
