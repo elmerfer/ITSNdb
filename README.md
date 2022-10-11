@@ -15,6 +15,8 @@ In order to install the ITSNdb R library the following tools are required:
 
 ## Installation
 ```
+install.packages("remotes")
+library(remotes)
 install.packages("devtools")
 library(devtools)
 install_github("elmerfer/ITSNdb")
