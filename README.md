@@ -119,7 +119,7 @@ PRIME is a PRedictor of class I IMmunogenic Epitopes. It combines predictions of
 
 Here we provide an R interface to install and use PRIME in your local machine.
 
-### Install PRIME and their dependencies
+### Install PRIME and its dependencies
 #### Up to now only the linux version.
 
 Onpen an R session or RStudio and type:
