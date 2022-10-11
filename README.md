@@ -8,6 +8,10 @@ In this sence, all peptides in the database have experimental confirmation of th
 
 ## Getting Started
 
+## Requirements
+In order to install the ITSNdb R library the following tools are required:
+
+* The Multiple Sequence Alignment ([msa](https://bioconductor.org/packages/release/bioc/html/msa.html)) R library available on [Bioconductor](https://bioconductor.org/) 
 
 ## Installation
 ```
