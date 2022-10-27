@@ -219,7 +219,7 @@ Cohort_results
 
 ## Estimate immunogenic scores or affinities of peptide-HLA pairs from ITSNdb or cohort studies by using DeepHLApan, DeepImmune and MHCflurry in Colab environments
 
-
+Each colab session allows to upload only one file, to upload a second one please terminate the current session and start a new one
 
 ## Running DeepImmuno
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elmerfer/ITSNdb/blob/main/Colab/DeepImmuno_Colab.ipynb)
