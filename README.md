@@ -25,6 +25,22 @@ library(ITSNdb)
 ##load the data 
 data(ITSNdb)
 ```
+## Datasets for software performance evaluation included in ITSNdb package
+* Val_dataset: validation dataset that simulates a patient neoantigen landscape, holding more than a hundred non-immunogenic neopeptides and less than ten immunogenic neoantigens. Main usage: performance validation, prioritization evaluation.
+
+* TNB_dataset: dataset containing thousands of neopeptides from different patients and clinical cohorts with ICB response association. Main usage: biomarker applicability evaluation. 
+
+### Usage
+
+Once ITSNdb installed
+```R
+## Load library
+library(ITSNdb)
+## Load the data
+data(Val_dataset)
+data(TNB_dataset)
+```
+
 ## Peptide binding affinity and/or immunogenicity predictors included in the ITSNdb package 
 Here, in order to facilitate the exploration of state of the art tools for binding affinity prediction or immunogenicity score prediction, we implement easy to use interfaces for peptide-HLA binding affinity or immunogenicity prediction:
 
