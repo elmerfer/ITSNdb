@@ -26,7 +26,9 @@ library(ITSNdb)
 data(ITSNdb)
 ```
 ## Datasets for software performance evaluation included in ITSNdb package
-* Val_dataset: validation dataset that simulates a patient neoantigen landscape, holding more than a hundred non-immunogenic neopeptides and less than ten immunogenic neoantigens. Main usage: performance validation, prioritization evaluation.
+* Val_dataset: validation dataset that simulates a patient neoantigen landscape, which includes 113 non-immunogenic neopeptides-HLA pairs with unvalidated MHC-I presentation; and 7 immunogenic, non-SNV derived, neoantigens-HLA pairs with both MHC-I presentation and immunogenicity experimentally validated.
+  - References: [Robbins, P. *et al.*](https://pubmed.ncbi.nlm.nih.gov/23644516/), [Ehx, G. *et al.*](https://pubmed.ncbi.nlm.nih.gov/33740418/), [Huang, J. *et al.*](https://pubmed.ncbi.nlm.nih.gov/15128789/) and [Yang, W. *et al.*](https://pubmed.ncbi.nlm.nih.gov/31011208/).
+  - Main usage: performance validation, prioritization evaluation.
 
 * TNB_dataset: dataset containing thousands of neopeptides from different patients and clinical cohorts with ICB response association. Main usage: biomarker applicability evaluation. 
 
