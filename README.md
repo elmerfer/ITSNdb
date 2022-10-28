@@ -30,7 +30,9 @@ data(ITSNdb)
   - References: [Robbins, P. *et al.*](https://pubmed.ncbi.nlm.nih.gov/23644516/), [Ehx, G. *et al.*](https://pubmed.ncbi.nlm.nih.gov/33740418/), [Huang, J. *et al.*](https://pubmed.ncbi.nlm.nih.gov/15128789/) and [Yang, W. *et al.*](https://pubmed.ncbi.nlm.nih.gov/31011208/).
   - Main usage: performance validation, prioritization evaluation.
 
-* TNB_dataset: dataset containing thousands of neopeptides from different patients and clinical cohorts with ICB response association. Main usage: biomarker applicability evaluation. 
+* TNB_dataset: dataset containing a list of candidates tumor specific neoantigens predicted to bind to the MHC-I complex, of patients from six immune checkpoint blockade immunotherapy (ICB) treated cohorts, one non–small cell lung and five melanoma cancer cohorts, with ICB response association and TMB evaluation. 
+  - References: [Rizvi, N. A. *et al.*](https://pubmed.ncbi.nlm.nih.gov/25765070/), [Van Allen, E. M. *et al.*](https://pubmed.ncbi.nlm.nih.gov/26359337/), [Snyder, A. *et al.*](https://pubmed.ncbi.nlm.nih.gov/25409260/), [Riaz, N. *et al.*](https://pubmed.ncbi.nlm.nih.gov/29033130/).
+  - Main usage: biomarker applicability evaluation. 
 
 ### Usage
 
