@@ -242,4 +242,5 @@ Each colab session allows to upload only one file, to upload a second one please
 * **Elmer A. Fernández - *Idea* and Developer - [Profile](https://www.researchgate.net/profile/Elmer_Fernandez) - [CONICET](http://www.conicet.gov.ar) - [FPM](https://fpmlab.org.ar/) 
 * **Guadalupe Nibeyro - Curator and Developer - [CONICET](http://www.conicet.gov.ar) - [FPM](https://fpmlab.org.ar/) 
 * **Juan Ignacio Folco - Python and Colab Developer - 
-* **Verónica Baronetto - Tester - [CONICET](http://www.conicet.gov.ar) - [FPM](https://fpmlab.org.ar/) 
+* **Verónica Baronetto - Tester - [CONICET](http://www.conicet.gov.ar) - [FPM](https://fpmlab.org.ar/)
+* **Pablo Pastore - Advisor - [AnyoneAI](https://anyoneai.com/)
